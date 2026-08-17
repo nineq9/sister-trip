@@ -1,0 +1,14 @@
+{
+  "name": "Sister Trip — 3人のための高性能旅のしおり",
+  "short_name": "Sister Trip",
+  "description": "予定、地図、予約、物語、クエストをひとつにまとめる3人用の旅アプリ",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f1e8",
+  "theme_color": "#f6f1e8",
+  "orientation": "portrait-primary",
+  "icons": [
+    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
