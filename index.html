@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6f1e8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Sister Trip" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>Sister Trip — 3人のための旅のしおり</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <header class="topbar" id="topbar">
+      <button class="trip-pill" id="membersButton" type="button" aria-label="旅行メンバー">
+        <span class="avatar-stack" aria-hidden="true">
+          <span class="avatar avatar-a">A</span>
+          <span class="avatar avatar-b">1</span>
+          <span class="avatar avatar-c">2</span>
+        </span>
+        <span>3人で編集中</span>
+      </button>
+      <button class="icon-button" id="offlineButton" type="button" aria-label="オフライン状態を確認">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 17.5h-2a4.5 4.5 0 0 1-.5-8.97A6.5 6.5 0 0 1 18.43 10 3.75 3.75 0 0 1 18 17.47"/><path d="m8 12 4 4 4-4"/><path d="M12 16V8"/></svg>
+      </button>
+    </header>
+
+    <main>
+      <section class="screen active" data-screen="home" id="screen-home" aria-label="ホーム">
+        <article class="hero-card">
+          <img class="hero-image" src="https://images.unsplash.com/photo-1637851058613-95f0d41c3c2f?auto=format&fit=crop&w=1600&q=88" alt="夕暮れのエッフェル塔とセーヌ川" />
+          <div class="hero-overlay"></div>
+          <div class="hero-content">
+            <p class="eyebrow light">NEXT DESTINATION</p>
+            <h1>Paris <span class="flag">🇫🇷</span></h1>
+            <p class="hero-date">11 SEP — 18 SEP</p>
+            <div class="countdown-row">
+              <span>出発まであと</span>
+              <strong id="countdownDays">25</strong><span>日</span>
+            </div>
+            <button class="glass-button" type="button" data-open-screen="trip">旅行の準備を見る <span>→</span></button>
+          </div>
+        </article>
+
+        <section class="section-block compact-top">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">YOUR JOURNEY</p>
+              <h2>7つの街を、ひとつの物語に。</h2>
+            </div>
+          </div>
+          <div class="city-rail" id="cityRail" aria-label="訪問都市一覧"></div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading inline-heading">
+            <div>
+              <p class="eyebrow">TODAY'S PREVIEW</p>
+              <h2>行く前に知ると、景色が変わる。</h2>
+            </div>
+            <button class="text-button" type="button" data-open-story="eiffel">見る</button>
+          </div>
+          <button class="feature-card" type="button" data-open-story="eiffel">
+            <img src="https://images.unsplash.com/photo-1653343860295-2b07f992b7b2?auto=format&fit=crop&w=1200&q=88" alt="オルセー美術館越しのエッフェル塔の夕景" />
+            <div class="feature-gradient"></div>
+            <div class="feature-copy">
+              <span class="micro-badge">PARIS STORY · 02:15</span>
+              <h3>エッフェル塔は、最初から愛されていたわけじゃない。</h3>
+              <p>完成前から「パリの恥」とまで批判された鉄の塔が、なぜ街の象徴になったのか。</p>
+            </div>
+          </button>
+        </section>
+
+        <section class="section-block quest-card home-quest">
+          <div class="quest-symbol">✦</div>
+          <div class="quest-copy">
+            <p class="eyebrow">PARIS QUEST 01</p>
+            <h2>「王冠を失った王妃」の最後の場所を見つけて。</h2>
+            <p>答えはまだ見せません。街を歩くほど伏線が回収されます。</p>
+          </div>
+          <button class="round-arrow" type="button" data-open-screen="more" aria-label="クエストを見る">→</button>
+        </section>
+      </section>
+
+      <section class="screen" data-screen="today" id="screen-today" aria-label="今日の予定">
+        <div class="page-intro">
+          <p class="eyebrow">TODAY</p>
+          <div class="date-title-row">
+            <div>
+              <h1>15 SEP <span>Tue</span></h1>
+              <p>Paris · 美術と夜の物語</p>
+            </div>
+            <button class="soft-icon" type="button" id="replanButton" aria-label="予定を組み替える">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7h-8"/><path d="m17 4 3 3-3 3"/><path d="M4 17h8"/><path d="m7 14-3 3 3 3"/><path d="M7 7h1"/><path d="M16 17h1"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="day-theme-card">
+          <span class="theme-icon">◌</span>
+          <div>
+            <span>今日のテーマ</span>
+            <strong>革命と帝国のあいだで、パリを見る。</strong>
+          </div>
+          <button class="mini-audio" type="button" data-speak="今日は、革命と帝国のあいだでパリを見る日です。オルセーからアンヴァリッドへ歩くと、王政の終わりと近代フランスの始まりが街の中でつながって見えてきます。">▶</button>
+        </div>
+
+        <div class="timeline" id="timeline"></div>
+
+        <section class="smart-gap-card">
+          <div class="smart-gap-icon">♡</div>
+          <div>
+            <p class="eyebrow">IF WE HAVE 40 MIN</p>
+            <h3>近くに、妹が保存した場所があります。</h3>
+            <p>徒歩7分 · 予定を崩さず寄れます</p>
+          </div>
+          <button class="pill-button" type="button" data-open-screen="map">地図</button>
+        </section>
+      </section>
+
+      <section class="screen map-screen" data-screen="map" id="screen-map" aria-label="地図">
+        <div class="map-header-panel">
+          <div class="page-intro map-intro">
+            <p class="eyebrow">MAP</p>
+            <h1>Paris</h1>
+          </div>
+          <div class="segmented" id="mapFilters" role="tablist" aria-label="地図フィルター">
+            <button class="active" type="button" data-filter="all">すべて</button>
+            <button type="button" data-filter="today">今日</button>
+            <button type="button" data-filter="wish">行きたい</button>
+          </div>
+        </div>
+        <div class="map-wrap">
+          <div id="map" class="leaflet-map" aria-label="パリのスポット地図"></div>
+          <div id="offlineMap" class="offline-map" hidden>
+            <div class="offline-grid"></div>
+            <svg viewBox="0 0 360 540" aria-hidden="true">
+              <path class="river" d="M-30 380 C60 300 115 435 205 352 C250 310 315 315 390 250"/>
+              <path class="route-line" d="M76 395 C115 350 168 320 205 298 C250 270 270 205 300 146"/>
+              <g class="offline-pin" transform="translate(66 388)"><circle r="18"/><text y="5">E</text></g>
+              <g class="offline-pin" transform="translate(168 320)"><circle r="18"/><text y="5">O</text></g>
+              <g class="offline-pin" transform="translate(205 298)"><circle r="18"/><text y="5">I</text></g>
+              <g class="offline-pin" transform="translate(300 146)"><circle r="18"/><text y="5">M</text></g>
+            </svg>
+            <div class="offline-map-copy">
+              <strong>オフライン簡易マップ</strong>
+              <span>保存済みスポットの位置関係は確認できます。</span>
+            </div>
+          </div>
+
+          <div class="map-members">
+            <span class="map-avatar a">A</span>
+            <span class="map-avatar b">1</span>
+            <span class="map-avatar c">2</span>
+          </div>
+          <button class="add-place-fab" id="addPlaceButton" type="button" aria-label="行きたい場所を追加">＋</button>
+        </div>
+        <section class="nearby-sheet">
+          <div class="sheet-handle"></div>
+          <div class="sheet-heading">
+            <div>
+              <p class="eyebrow">NEARBY WISH</p>
+              <h2>この辺で寄れそう</h2>
+            </div>
+            <span class="distance-badge">徒歩 7分</span>
+          </div>
+          <article class="nearby-card">
+            <div class="nearby-photo paris-cafe"></div>
+            <div class="nearby-copy">
+              <strong>妹1の保存スポット</strong>
+              <span>カフェ · FLEXに追加可能</span>
+              <div class="wishers"><span>1</span><span>A</span><em>2人が気になる</em></div>
+            </div>
+            <button class="small-plus" type="button" data-quick-add>＋</button>
+          </article>
+        </section>
+      </section>
+
+      <section class="screen" data-screen="trip" id="screen-trip" aria-label="予約と移動">
+        <div class="page-intro">
+          <p class="eyebrow">TRIP</p>
+          <div class="date-title-row">
+            <div>
+              <h1>旅の全部</h1>
+              <p>ホテル・交通・予約を、探さない。</p>
+            </div>
+            <span class="sync-badge"><i></i>同期設計済み</span>
+          </div>
+        </div>
+
+        <div class="segmented trip-segments" id="tripFilters">
+          <button class="active" type="button" data-trip-filter="all">すべて</button>
+          <button type="button" data-trip-filter="stay">ホテル</button>
+          <button type="button" data-trip-filter="move">移動</button>
+          <button type="button" data-trip-filter="ticket">予約</button>
+        </div>
+
+        <div class="truth-card">
+          <div class="truth-icon">✓</div>
+          <div>
+            <p class="eyebrow">RESERVATION TRUTH</p>
+            <h3>予約確認メールを最優先に照合</h3>
+            <p>Gmail ＞ Calendar ＞ 手入力。食い違いは勝手に上書きしません。</p>
+          </div>
+        </div>
+
+        <div class="trip-list" id="tripList"></div>
+
+        <div class="conflict-card">
+          <div class="conflict-top"><span>!</span><strong>日付の食い違いを検出したら</strong></div>
+          <div class="compare-row"><span>Calendar</span><b>21 → 24</b></div>
+          <div class="compare-row correct"><span>予約確認メール</span><b>21 → 23</b></div>
+          <p>予約確認メールを正として表示し、変更前に3人へ知らせます。</p>
+        </div>
+      </section>
+
+      <section class="screen" data-screen="more" id="screen-more" aria-label="物語とクエスト">
+        <div class="page-intro">
+          <p class="eyebrow">DISCOVER</p>
+          <h1>街の物語</h1>
+          <p>ただ見るだけじゃなく、「なぜ？」を持って歩く。</p>
+        </div>
+
+        <article class="city-story-hero">
+          <div class="city-story-photo"></div>
+          <div class="city-story-overlay"></div>
+          <div class="city-story-copy">
+            <span>PARIS · 03:20</span>
+            <h2>革命の街なのに、なぜこんなに王の痕跡が残っている？</h2>
+            <button class="story-play" type="button" data-speak="パリは王の街として形づくられ、その後、革命によって王政を壊しました。けれど街は全部を消しませんでした。宮殿、広場、教会、記念碑が、それぞれ別の時代の価値観を重ねて残しています。今日はそれを探してみましょう。">▶ 3分で聴く</button>
+          </div>
+        </article>
+
+        <section class="quest-section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">QUESTS</p>
+              <h2>旅の伏線</h2>
+            </div>
+            <span class="quest-progress">1 / 6</span>
+          </div>
+          <div id="questList" class="quest-list"></div>
+        </section>
+
+        <section class="memory-output-card">
+          <div class="memory-art">
+            <span>EUROPE</span>
+            <strong>2026</strong>
+          </div>
+          <div>
+            <p class="eyebrow">AFTER THE TRIP</p>
+            <h3>帰国後は「旅の感想画像」に。</h3>
+            <p>実際に歩いたルート、写真、3人の言葉を1枚の記録にまとめます。</p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="メインナビゲーション">
+      <button class="nav-item active" type="button" data-nav="home">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+        <span>HOME</span>
+      </button>
+      <button class="nav-item" type="button" data-nav="today">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="m9 15 2 2 4-4"/></svg>
+        <span>TODAY</span>
+      </button>
+      <button class="nav-item" type="button" data-nav="map">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3Z"/><path d="M9 3v15M15 6v15"/></svg>
+        <span>MAP</span>
+      </button>
+      <button class="nav-item" type="button" data-nav="trip">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="3"/><path d="M9 7V5a3 3 0 0 1 6 0v2M4 12h16"/><path d="M10 12v2h4v-2"/></svg>
+        <span>TRIP</span>
+      </button>
+      <button class="nav-item" type="button" data-nav="more">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><path d="m5.6 5.6 2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3"/></svg>
+        <span>STORY</span>
+      </button>
+    </nav>
+  </div>
+
+  <dialog class="bottom-sheet-dialog" id="replanDialog">
+    <form method="dialog" class="dialog-sheet">
+      <div class="sheet-handle"></div>
+      <div class="dialog-header">
+        <div><p class="eyebrow">SMART REPLAN</p><h2>いま、どうなった？</h2></div>
+        <button class="close-button" value="cancel" aria-label="閉じる">×</button>
+      </div>
+      <p class="dialog-lead">有料・時間指定の予約は固定したまま、FLEXとWISHだけ組み替えます。</p>
+      <div class="replan-options">
+        <button type="button" data-replan="delay">30分遅れた</button>
+        <button type="button" data-replan="tired">ちょっと疲れた</button>
+        <button type="button" data-replan="rain">雨が降ってきた</button>
+      </div>
+      <div id="replanResult" class="replan-result" hidden></div>
+    </form>
+  </dialog>
+
+  <dialog class="bottom-sheet-dialog" id="addPlaceDialog">
+    <form method="dialog" class="dialog-sheet add-place-sheet" id="addPlaceForm">
+      <div class="sheet-handle"></div>
+      <div class="dialog-header">
+        <div><p class="eyebrow">ADD A PLACE</p><h2>行きたい場所を追加</h2></div>
+        <button class="close-button" value="cancel" aria-label="閉じる">×</button>
+      </div>
+      <label class="field-label">場所・Google Mapsリンク</label>
+      <input id="placeInput" class="text-field" name="place" placeholder="例：Café de Flore / maps.app.goo.gl/..." required />
+      <label class="field-label">だれの希望？</label>
+      <div class="member-choice" role="radiogroup" aria-label="希望者">
+        <label><input type="radio" name="member" value="Asumi" checked /><span>A</span>Asumi</label>
+        <label><input type="radio" name="member" value="Sister 1" /><span>1</span>妹1</label>
+        <label><input type="radio" name="member" value="Sister 2" /><span>2</span>妹2</label>
+      </div>
+      <label class="field-label">どれくらい行きたい？</label>
+      <div class="priority-choice">
+        <label><input type="radio" name="priority" value="must" checked /><span>♥</span>絶対行きたい</label>
+        <label><input type="radio" name="priority" value="maybe" /><span>☆</span>行けたら</label>
+      </div>
+      <button class="primary-button" value="default" type="submit">追加する</button>
+    </form>
+  </dialog>
+
+  <dialog class="story-dialog" id="storyDialog">
+    <article class="story-modal">
+      <button class="story-close" id="storyClose" type="button" aria-label="閉じる">←</button>
+      <div class="story-cover eiffel-cover">
+        <img src="https://images.unsplash.com/photo-1763191804533-1974643192e7?auto=format&fit=crop&w=1600&q=88" alt="夕暮れのエッフェル塔" />
+        <div class="story-cover-gradient"></div>
+        <div class="story-cover-title">
+          <span>PARIS · STORY 01</span>
+          <h2>エッフェル塔</h2>
+          <p>Eiffel Tower</p>
+        </div>
+      </div>
+      <div class="story-body">
+        <button class="audio-player" type="button" data-speak="1889年、パリ万博のために建てられたエッフェル塔。当時は巨大で醜い鉄の柱だと、作家や芸術家から強く批判されました。それでも塔は残り、無線通信という新しい役割を得て、やがてパリの象徴になりました。今夜、塔が光る瞬間に、最初は嫌われていた建物だということを思い出してみてください。"><span class="play-dot">▶</span><span><b>02:15</b><small>歩きながら聴く</small></span></button>
+        <p class="story-lede">この塔は、パリの人たちに最初から愛されたわけではありません。</p>
+        <p>1889年の万国博覧会のために建てられたとき、多くの作家や芸術家は強く反対しました。鉄骨むき出しの巨大構造物は、当時の「美しいパリ」に似合わないと思われたのです。</p>
+        <div class="surprise-box"><span>!</span><p><strong>びっくり</strong> 本来は約20年で撤去される可能性がありました。</p></div>
+        <p>ところが無線通信の中継地点として価値を持ち始め、塔は残ることになります。いま世界中の人が「パリ」と聞いて思い浮かべるものが、かつては街の景観を壊す存在だと思われていました。</p>
+        <div class="look-for">
+          <p class="eyebrow">WHEN YOU'RE THERE</p>
+          <h3>現地で見る3つ</h3>
+          <ul><li>鉄骨の細さと、全体の巨大さのギャップ</li><li>セーヌ川と塔の位置関係</li><li>夜のシャンパンフラッシュ</li></ul>
+        </div>
+      </div>
+    </article>
+  </dialog>
+
+  <dialog class="bottom-sheet-dialog" id="offlineDialog">
+    <form method="dialog" class="dialog-sheet offline-sheet">
+      <div class="sheet-handle"></div>
+      <div class="dialog-header"><div><p class="eyebrow">OFFLINE READY</p><h2>圏外でも、旅は止めない。</h2></div><button class="close-button" value="cancel">×</button></div>
+      <div class="offline-items">
+        <div><span>✓</span><p><strong>今日の予定</strong><small>端末に保存</small></p></div>
+        <div><span>✓</span><p><strong>予約・ホテル情報</strong><small>端末に保存</small></p></div>
+        <div><span>✓</span><p><strong>物語・クエスト</strong><small>アプリ本体と一緒に保存</small></p></div>
+        <div><span>◌</span><p><strong>詳細地図</strong><small>オンライン時はLeaflet / 圏外時は簡易マップ</small></p></div>
+      </div>
+      <p class="offline-note">初回だけオンラインで開けば、基本画面はオフラインでも開けます。</p>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>
