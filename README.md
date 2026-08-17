@@ -2,42 +2,47 @@
 
 3人で使う、旅行前・旅行中・帰国後までつながる高性能な旅のしおり PWA。
 
-## v1 implemented
+## Implemented
 
 - HOME: 次の都市、カウントダウン、都市のストーリー、旅クエスト
 - TODAY: LOCKED / FLEX / WISH の予定管理
 - Smart Replan: 遅延・疲労・雨でも LOCKED を動かさず候補を組み替えるUI
-- MAP: Leaflet + OpenStreetMap のスポット地図、WISHフィルタ、拠点表示
-- Offline fallback: Service Worker とオフライン簡易マップ
-- Add place: 3人それぞれが「絶対行きたい / 行けたら」を保存（現状は端末 localStorage）
+- MAP: Leaflet + OpenStreetMap、WISHフィルタ、拠点表示
+- Offline fallback: Service Worker + 圏外用簡易マップ
+- Add Place: 「絶対行きたい / 行けたら」を追加
 - TRIP: ホテル・交通・予約を1画面に集約
-- Reservation Truth: Gmail > Calendar > 手入力 の優先ルールをUI化
-- STORY: 街全体の背景、現地で見るポイント、端末の読み上げ音声
+- Reservation Truth: Gmail > Calendar > 手入力という確認ルール
+- STORY: 街全体の背景、現地で見るポイント、端末読み上げ音声
 - QUEST: 旅の「伏線」をヒント形式で体験
-- AFTER TRIP: 帰国後の旅画像出力を見据えた画面
+- AFTER TRIP: 帰国後の旅画像出力を見据えたUI
+- Supabase Auth: 3人それぞれのログイン
+- Invite link: オーナーが妹2人を招待
+- Realtime: WISH / itinerary / quest progress 用の共有基盤
+- RLS: 旅行メンバー以外は旅行データを読めない構成
 
-## Privacy note
+## Data architecture
 
-このリポジトリが **Public の間は、ホテル住所、予約番号、QR、氏名、実際のGoogle連携情報をコミットしない** 方針です。
-現在のデータはUI検証用に個人情報を除いたサンプルです。
+Supabase に `trips`, `trip_members`, `cities`, `places`, `itinerary_items`, `wishes`, `reservation_checks`, `quests`, `quest_progress`, `trip_invites` を用意済みです。
 
-本番の3人共有を有効化する前に、このリポジトリを Private にしてから、Supabase/Auth と Google OAuth を接続します。
+有料・時間指定の予定は `locked`、組み替え可能な予定は `flex`、候補は `wish` として扱います。
 
-## Run
+## Privacy
 
-ビルド不要の静的PWAです。
+このリポジトリにはホテルの正確な住所、予約番号、暗証番号、QR、Gmail本文などの個人情報をコミットしません。公開可能なUIコードと写真URLだけを置き、実データは認証 + RLS が有効なSupabase側へ保存する設計です。
+
+Supabaseのフロントエンド用 publishable key は公開されることを前提としたキーで、データアクセスはRLSで制御します。
+
+## Run locally
 
 ```bash
 python3 -m http.server 8000
 ```
 
-ブラウザで `http://localhost:8000` を開きます。
-Service Worker は localhost / HTTPS で動きます。
+`http://localhost:8000` を開きます。Service Worker は localhost / HTTPS で動きます。
 
-## Next production wiring
+## Remaining production wiring
 
-1. Repository を Private に変更
-2. Supabase project を作成し、3人のAuth / Realtime / Storageを接続
-3. Google OAuth で Calendar + Gmail 予約情報の読み取りを接続
-4. 本番のホテル・交通・予約データを投入
-5. iPhone Safari の「ホーム画面に追加」で3人が利用
+- Gmail / Google Calendar の本番OAuth取り込み
+- 実際の予約情報・ホテル・交通データの非公開インポート
+- 各都市の写真・ストーリー・クエスト・音声ガイドの充実
+- 旅行後の感想画像ジェネレーター
