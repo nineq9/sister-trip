@@ -1,10 +1,14 @@
-const CACHE = 'sister-trip-v1';
-const CORE = ['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./icon.svg'];
+const CACHE = 'sister-trip-v2';
+const CORE = [
+  './','./index.html','./styles.css','./sync.css','./app.js','./sync.js','./supabase-config.js',
+  './manifest.webmanifest','./icon.svg'
+];
 const REMOTE = [
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js',
   'https://images.unsplash.com/photo-1637851058613-95f0d41c3c2f?auto=format&fit=crop&w=1600&q=88',
-  'https://images.unsplash.com/photo-1653343860295-2b07f992b7b2?auto=format&fit=crop&w=1200&q=88'
+  'https://images.unsplash.com/photo-1653343860295-2b07f992b7b2f?auto=format&fit=crop&w=1200&q=88'
 ];
 
 self.addEventListener('install', event => {
@@ -13,7 +17,7 @@ self.addEventListener('install', event => {
     await cache.addAll(CORE);
     await Promise.allSettled(REMOTE.map(async url => {
       const response = await fetch(url, {mode:'cors'});
-      await cache.put(url, response);
+      if (response.ok) await cache.put(url, response);
     }));
     self.skipWaiting();
   })());
