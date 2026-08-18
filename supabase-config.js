@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     await sisterTripLoadClassic('./trip-data.js');
     await sisterTripLoadClassic('./map-v3.js');
+    await sisterTripLoadClassic('./shared-v2.js');
     window.SisterTripV3Boot?.();
   } catch (error) {
     console.error('Could not load Sister Trip v3 enhancements', error);
