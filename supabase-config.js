@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     await sisterTripLoadClassic('./trip-data.js');
     await sisterTripLoadClassic('./trip-data-imagekeys.js');
+    await sisterTripLoadClassic('./local-assets-v6.js');
+    window.SisterTripLocalAssetsV6?.apply();
     await sisterTripLoadClassic('./image-stability.js');
     window.SisterTripImages?.install();
     await sisterTripLoadClassic('./map-v3.js');
@@ -35,6 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.SisterTripReservationWarningsV4Install?.();
     await sisterTripLoadClassic('./editorial-v5.js');
     window.SisterTripEditorialV5Install?.();
+    window.SisterTripLocalAssetsV6?.apply();
   } catch (error) {
     console.error('Could not load Sister Trip enhancements', error);
   }
