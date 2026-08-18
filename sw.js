@@ -1,7 +1,8 @@
-const CACHE = 'sister-trip-v13';
+const CACHE = 'sister-trip-v14';
 const CORE = [
   './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css','./features-v4.css','./editorial-v5.css',
-  './app.js','./trip-data.js','./trip-data-imagekeys.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./discover-data.js','./editorial-v5-data.js','./reservation-truth-v4.js','./features-v4.js','./reservation-warning-v4.js','./editorial-v5.js','./sync.js','./supabase-config.js',
+  './app.js','./trip-data.js','./trip-data-imagekeys.js','./local-assets-v6.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./discover-data.js','./editorial-v5-data.js','./reservation-truth-v4.js','./features-v4.js','./reservation-warning-v4.js','./editorial-v5.js','./sync.js','./supabase-config.js',
+  './assets/city/paris-generated.webp','./assets/city/milano-generated.webp',
   './manifest.webmanifest','./icon.svg'
 ];
 const REMOTE = [
