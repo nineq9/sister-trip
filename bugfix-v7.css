@@ -1,6 +1,5 @@
 /* Sister Trip v9 — MAP control consolidation + Safari recommendation readability + TRIP repair. */
 
-/* Keep MAP as one viewport; the recommendation sheet is the only vertical scroller. */
 body.sister-map-active{
   height:100dvh;
   overflow:hidden!important;
@@ -64,6 +63,17 @@ body.map-unified-ready .map-screen .map-v4-discover-controls{
   min-width:0;
   display:flex;
   align-items:center;
+}
+.map-unified-field .sr-only{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
 }
 .map-unified-field + .map-unified-field::before{
   content:"";
@@ -211,8 +221,7 @@ body.map-unified-ready .map-screen .map-v4-discover-controls{
   white-space:nowrap;
 }
 
-/* TRIP root cause fix: the status class `verified` exists on BOTH the row and badge.
-   Never style the entire row as if it were the badge. */
+/* TRIP root cause fix: `verified` is both a row status and the badge class. */
 .editorial-v5 #screen-trip .trip-item,
 .editorial-v5 #screen-trip .trip-item.verified,
 .editorial-v5 #screen-trip .trip-item.attention,
