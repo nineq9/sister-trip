@@ -1,6 +1,7 @@
-/* Sister Trip v7 — focused QA fixes for MAP and TRIP only. */
+/* Sister Trip v8 — focused Safari QA fixes for MAP and TRIP only. */
 
-/* MAP: keep the page itself fixed; scroll recommendations inside the sheet. */
+/* MAP: keep the map fixed, but make the WHOLE recommendation sheet scrollable.
+   iOS Safari is much more reliable with one scroll container than a nested list. */
 body.sister-map-active{
   height:100dvh;
   overflow:hidden!important;
@@ -11,14 +12,7 @@ body.sister-map-active .app-shell{
   min-height:100dvh;
   overflow:hidden;
 }
-body.sister-map-active .topbar{
-  position:relative;
-  top:auto;
-  flex:0 0 66px;
-}
-body.sister-map-active main{
-  min-height:0;
-}
+body.sister-map-active main{min-height:0;}
 
 .editorial-v5 .map-screen.active{
   height:calc(100dvh - 66px)!important;
@@ -32,54 +26,51 @@ body.sister-map-active main{
 }
 
 .editorial-v5 .map-screen .nearby-sheet{
-  display:flex;
-  flex-direction:column;
-  max-height:min(58dvh, calc(100% - 150px))!important;
-  overflow:hidden!important;
-  padding-bottom:12px!important;
-  transition:transform .28s cubic-bezier(.2,.8,.2,1),max-height .28s ease,box-shadow .28s ease!important;
-}
-.editorial-v5 .map-screen .nearby-sheet.collapsed{
-  transform:translateY(calc(100% - 112px))!important;
-}
-.editorial-v5 .map-screen .nearby-sheet:not(.collapsed){
-  transform:translateY(0)!important;
-}
-.editorial-v5 .map-screen .nearby-sheet .sheet-handle{
-  flex:0 0 auto;
-  min-height:5px;
-  cursor:pointer;
-}
-.editorial-v5 .map-screen .nearby-sheet .sheet-heading,
-.editorial-v5 .map-screen .nearby-sheet .journey-sheet-copy,
-.editorial-v5 .map-screen .nearby-sheet .selected-place-card,
-.editorial-v5 .map-screen .nearby-sheet .map-sheet-actions{
-  flex:0 0 auto;
-}
-.editorial-v5 .map-screen .discover-list{
-  flex:1 1 auto!important;
-  min-height:0!important;
-  max-height:none!important;
+  display:block!important;
+  max-height:min(68dvh, calc(100% - 126px))!important;
   overflow-y:auto!important;
   overflow-x:hidden!important;
   overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
   touch-action:pan-y;
-  padding:2px 1px calc(18px + env(safe-area-inset-bottom))!important;
-  margin-top:10px!important;
+  padding-bottom:calc(22px + env(safe-area-inset-bottom))!important;
+  transition:transform .28s cubic-bezier(.2,.8,.2,1),max-height .28s ease,box-shadow .28s ease!important;
 }
-.editorial-v5 .map-screen .discover-card-wrap{
-  flex:0 0 auto;
+.editorial-v5 .map-screen .nearby-sheet.collapsed{
+  max-height:112px!important;
+  overflow:hidden!important;
+  transform:translateY(0)!important;
+}
+.editorial-v5 .map-screen .nearby-sheet:not(.collapsed){
+  transform:translateY(0)!important;
+}
+.editorial-v5 .map-screen .nearby-sheet .sheet-handle{
+  position:sticky;
+  top:0;
+  z-index:3;
+  width:48px;
+  min-height:5px;
+  margin:2px auto 9px;
+  cursor:pointer;
+  touch-action:manipulation;
 }
 .editorial-v5 .map-screen .sheet-heading{
-  cursor:pointer;
-  padding-bottom:3px;
+  position:sticky;
+  top:12px;
+  z-index:2;
+  background:linear-gradient(180deg,rgba(250,247,240,.99) 0%,rgba(250,247,240,.96) 82%,rgba(250,247,240,0) 100%);
+  padding:2px 0 13px;
 }
-.editorial-v5 .map-screen .sheet-heading h2{
-  line-height:1.18;
+.editorial-v5 .map-screen .discover-list{
+  display:grid!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding:0 1px 18px!important;
+  margin-top:4px!important;
 }
+.editorial-v5 .map-screen .discover-card-wrap{display:grid!important;}
 .editorial-v5 .map-screen .nearby-sheet:not(.collapsed) .sheet-heading::after{
-  content:'おすすめを上下にスクロールできます';
+  content:'下へスクロールしてすべて見る';
   display:block;
   margin-top:5px;
   font-size:8px;
@@ -87,55 +78,73 @@ body.sister-map-active main{
   letter-spacing:.02em;
 }
 
-/* The map controls stay above the map and remain tappable. */
-.editorial-v5 .map-screen .map-header-panel{
-  pointer-events:none!important;
-}
+/* Controls remain tappable. */
+.editorial-v5 .map-screen .map-header-panel{pointer-events:none!important;}
 .editorial-v5 .map-screen .map-header-panel button,
 .editorial-v5 .map-screen .map-header-panel select,
 .editorial-v5 .map-screen .map-header-panel label,
-.editorial-v5 .map-v4-discover-controls{
-  pointer-events:auto!important;
-}
+.editorial-v5 .map-v4-discover-controls{pointer-events:auto!important;}
 
-/* TRIP: Japanese-first labels and guaranteed top-of-screen entry. */
-.editorial-v5 #screen-trip .page-intro .eyebrow{
-  font-size:0;
+/* TRIP: restore the original three-column card layout and force text visibility. */
+.editorial-v5 #screen-trip .trip-item{
+  display:grid!important;
+  grid-template-columns:42px minmax(0,1fr) auto!important;
+  column-gap:12px!important;
+  align-items:center!important;
+  min-height:88px!important;
 }
-.editorial-v5 #screen-trip .page-intro .eyebrow::after{
-  content:'旅の予約・移動';
-  font-size:9px;
-  letter-spacing:.17em;
+.editorial-v5 #screen-trip .trip-item .trip-icon{
+  display:grid!important;
+  visibility:visible!important;
+  opacity:1!important;
 }
-.editorial-v5 #screen-trip .truth-card .eyebrow{
-  font-size:0;
+.editorial-v5 #screen-trip .trip-item>div{
+  display:block!important;
+  min-width:0!important;
+  visibility:visible!important;
+  opacity:1!important;
+  color:var(--ink)!important;
 }
-.editorial-v5 #screen-trip .truth-card .eyebrow::after{
-  content:'予約確認';
-  font-size:9px;
-  letter-spacing:.17em;
+.editorial-v5 #screen-trip .trip-item h3{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  margin:0 0 4px!important;
+  color:var(--teal-dark)!important;
+  font-size:15px!important;
+  line-height:1.25!important;
+  overflow-wrap:anywhere;
 }
-.editorial-v5 #screen-trip .trip-editorial-copy span{
-  font-size:0;
-}
-.editorial-v5 #screen-trip .trip-editorial-copy span::after{
-  content:'旅の予約・移動';
-  font-size:9px;
-  letter-spacing:.16em;
+.editorial-v5 #screen-trip .trip-item p{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  margin:0!important;
+  color:var(--muted)!important;
+  font-size:11px!important;
+  line-height:1.4!important;
 }
 .editorial-v5 #screen-trip .verified{
+  display:inline-flex!important;
+  visibility:visible!important;
+  opacity:1!important;
   white-space:nowrap;
-  min-width:72px;
-  text-align:center;
+  min-width:0!important;
+  align-self:center;
 }
 
+/* Japanese-first headings without changing card geometry. */
+.editorial-v5 #screen-trip .page-intro .eyebrow{font-size:0;}
+.editorial-v5 #screen-trip .page-intro .eyebrow::after{content:'旅の予約・移動';font-size:9px;letter-spacing:.17em;}
+.editorial-v5 #screen-trip .truth-card .eyebrow{font-size:0;}
+.editorial-v5 #screen-trip .truth-card .eyebrow::after{content:'予約確認';font-size:9px;letter-spacing:.17em;}
+.editorial-v5 #screen-trip .trip-editorial-copy span{font-size:0;}
+.editorial-v5 #screen-trip .trip-editorial-copy span::after{content:'旅の予約・移動';font-size:9px;letter-spacing:.16em;}
+
 @media(max-width:390px){
-  .editorial-v5 .map-screen .nearby-sheet{
-    max-height:min(62dvh, calc(100% - 136px))!important;
-  }
-  .editorial-v5 .map-screen .nearby-sheet.collapsed{
-    transform:translateY(calc(100% - 108px))!important;
-  }
+  .editorial-v5 .map-screen .nearby-sheet{max-height:min(70dvh, calc(100% - 116px))!important;}
+  .editorial-v5 #screen-trip .trip-item{grid-template-columns:38px minmax(0,1fr) auto!important;column-gap:9px!important;}
+  .editorial-v5 #screen-trip .verified{font-size:9px!important;padding-left:8px!important;padding-right:8px!important;}
 }
 
 @media(prefers-reduced-motion:reduce){
