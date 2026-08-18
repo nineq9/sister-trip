@@ -1,7 +1,7 @@
-const CACHE = 'sister-trip-v5';
+const CACHE = 'sister-trip-v6';
 const CORE = [
   './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css',
-  './app.js','./trip-data.js','./map-v3.js','./sync.js','./supabase-config.js',
+  './app.js','./trip-data.js','./map-v3.js','./shared-v2.js','./sync.js','./supabase-config.js',
   './manifest.webmanifest','./icon.svg'
 ];
 const REMOTE = [
