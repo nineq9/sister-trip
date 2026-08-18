@@ -1,7 +1,7 @@
-const CACHE = 'sister-trip-v10';
+const CACHE = 'sister-trip-v11';
 const CORE = [
   './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css','./features-v4.css',
-  './app.js','./trip-data.js','./trip-data-imagekeys.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./discover-data.js','./features-v4.js','./sync.js','./supabase-config.js',
+  './app.js','./trip-data.js','./trip-data-imagekeys.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./discover-data.js','./reservation-truth-v4.js','./features-v4.js','./sync.js','./supabase-config.js',
   './manifest.webmanifest','./icon.svg'
 ];
 const REMOTE = [
@@ -68,7 +68,6 @@ self.addEventListener('fetch', event => {
         })());
         return cached;
       }
-
       try {
         const response = await fetch(event.request);
         if (response.ok || response.type === 'opaque') {
