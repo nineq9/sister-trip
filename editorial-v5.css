@@ -1,0 +1,130 @@
+/* Sister Trip v5 — photo-first premium editorial layer. */
+:root{
+  --paper:#f4efe5;
+  --paper-2:#faf7f0;
+  --ink:#14211e;
+  --muted:#6c756f;
+  --line:rgba(20,33,30,.10);
+  --teal-dark:#355f5a;
+  --teal-soft:#dbe7e2;
+  --shadow:0 20px 55px rgba(31,45,40,.10);
+}
+
+body.editorial-v5{background:var(--paper);}
+.editorial-v5 .app-shell{background:var(--paper);}
+.editorial-v5 .topbar{background:linear-gradient(180deg,rgba(244,239,229,.97),rgba(244,239,229,.78),transparent);}
+.editorial-v5 .screen{padding-left:18px;padding-right:18px;}
+.editorial-v5 .eyebrow{letter-spacing:.17em;font-size:9px;}
+.editorial-v5 .page-intro{padding-top:16px;padding-bottom:22px;}
+.editorial-v5 .page-intro h1,.editorial-v5 .section-heading h2{font-family:Georgia,"Times New Roman",serif;font-weight:500;letter-spacing:-.035em;}
+
+/* HOME — a travel magazine cover, not a dashboard. */
+.editorial-v5 .hero-card{min-height:67dvh;max-height:740px;border-radius:30px;box-shadow:none;margin-top:2px;background:#233c38;}
+.editorial-v5 .hero-image{filter:saturate(.88) contrast(.98);}
+.editorial-v5 .hero-overlay{background:linear-gradient(180deg,rgba(8,20,18,.02) 0%,rgba(8,20,18,.10) 42%,rgba(8,20,18,.80) 100%);}
+.editorial-v5 .hero-content{padding:34px 26px 30px;}
+.editorial-v5 .hero-content h1{font-size:64px;line-height:.92;}
+.editorial-v5 .glass-button{background:rgba(247,243,234,.14);border-color:rgba(255,255,255,.24);box-shadow:none;}
+.editorial-v5 .section-block{margin-top:42px;}
+.editorial-v5 .section-heading{margin-bottom:18px;}
+.editorial-v5 .city-rail{grid-auto-columns:78%;gap:12px;padding-bottom:4px;scroll-snap-type:x mandatory;}
+.editorial-v5 .city-chip{position:relative;min-height:250px;padding:22px;border:0;border-radius:26px;overflow:hidden;color:#fff;background-image:linear-gradient(180deg,rgba(8,22,20,.03),rgba(8,22,20,.72)),var(--city-image);background-size:cover;background-position:center;box-shadow:none;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:flex-end;isolation:isolate;}
+.editorial-v5 .city-chip::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,20,18,.72));z-index:-1;}
+.editorial-v5 .city-chip.active{background-image:linear-gradient(180deg,rgba(8,22,20,.02),rgba(8,22,20,.72)),var(--city-image);color:#fff;}
+.editorial-v5 .city-chip span{font-size:9px;letter-spacing:.12em;margin-bottom:7px;opacity:.72;}
+.editorial-v5 .city-chip strong{font-family:Georgia,serif;font-size:34px;font-weight:500;line-height:1;}
+.editorial-v5 .city-chip em{font-size:10px;margin-top:8px;opacity:.78;}
+.editorial-v5 .feature-card{min-height:430px;border-radius:28px;box-shadow:none;}
+.editorial-v5 .feature-copy{left:24px;right:24px;bottom:24px;}
+.editorial-v5 .feature-copy h3{font-size:31px;}
+
+/* TODAY — photo-led itinerary with quiet detail panels. */
+.editorial-v5 .day-theme-card{background:#315b56;border-radius:22px;box-shadow:none;}
+.editorial-v5 .timeline{margin-top:28px;}
+.editorial-v5 .timeline-item{grid-template-columns:52px 16px 1fr;min-height:0;margin-bottom:18px;}
+.editorial-v5 .timeline-time{padding-top:14px;font-size:11px;}
+.editorial-v5 .timeline-line::before{bottom:-20px;}
+.editorial-v5 .timeline-card{position:relative;display:block;min-height:205px;margin:0 0 0 8px!important;padding:0!important;border:0!important;border-radius:24px!important;overflow:hidden;background:#27403b;box-shadow:none!important;isolation:isolate;}
+.editorial-v5 .timeline-card::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(8,20,18,.02),rgba(8,20,18,.14) 35%,rgba(8,20,18,.80) 100%);pointer-events:none;}
+.editorial-v5 .timeline-card>img{position:absolute!important;inset:0;width:100%!important;height:100%!important;border-radius:0!important;object-fit:cover;z-index:0;filter:saturate(.88);}
+.editorial-v5 .timeline-card>div{position:absolute;z-index:2;left:18px;right:54px;bottom:17px;color:#fff;}
+.editorial-v5 .timeline-card h3{font-family:Georgia,serif;font-weight:500;font-size:23px;line-height:1.05;margin-bottom:7px;}
+.editorial-v5 .timeline-card p{color:rgba(255,255,255,.78);font-size:10px;}
+.editorial-v5 .timeline-card .status-badge{background:rgba(248,245,238,.16);color:#fff;border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);}
+.editorial-v5 .timeline-card::after{z-index:3;right:16px!important;top:16px!important;transform:none!important;width:32px;height:32px;border-radius:50%;background:rgba(248,245,238,.16);display:grid;place-items:center;color:#fff!important;backdrop-filter:blur(8px);}
+.editorial-v5 .timeline-item.is-expanded .timeline-card::after{transform:rotate(180deg)!important;}
+.editorial-v5 .timeline-item.is-expanded .timeline-card{margin-bottom:10px!important;}
+.editorial-v5 .timeline-extra{margin-left:8px;background:rgba(250,247,240,.78);border:0;border-radius:20px;box-shadow:none;}
+.editorial-v5 .timeline-detail-row{padding:13px 1px;}
+.editorial-v5 .timeline-map-button{background:transparent;border:1px solid rgba(53,95,90,.22);color:var(--teal-dark);}
+.editorial-v5 .smart-gap-card{background:transparent;border:1px solid var(--line);box-shadow:none;}
+
+/* MAP — map remains the canvas. Controls float; recommendations peek from below. */
+.editorial-v5 .map-screen{padding-left:0!important;padding-right:0!important;}
+.editorial-v5 .map-screen.active{height:calc(100dvh - 66px);}
+.editorial-v5 .map-screen .map-wrap{background:#dfe4dd;}
+.editorial-v5 .map-screen .map-header-panel{top:10px;left:10px;right:10px;z-index:850;pointer-events:none;}
+.editorial-v5 .map-v3-toolbar{grid-template-columns:118px 1fr;gap:7px;}
+.editorial-v5 .map-city-control,.editorial-v5 .map-v3-toolbar .segmented{background:rgba(250,247,240,.92);box-shadow:0 8px 24px rgba(23,35,31,.10);border-color:rgba(20,33,30,.09);}
+.editorial-v5 .map-v4-discover-controls{pointer-events:auto!important;position:relative;z-index:900;grid-template-columns:1fr 1fr!important;gap:7px!important;margin-top:7px!important;}
+.editorial-v5 .map-v4-mode,.editorial-v5 .map-v4-day{pointer-events:auto!important;touch-action:manipulation;background:rgba(250,247,240,.94)!important;box-shadow:0 8px 24px rgba(23,35,31,.10)!important;border-color:rgba(20,33,30,.09)!important;}
+.editorial-v5 .map-v4-mode button{pointer-events:auto!important;touch-action:manipulation;min-height:42px!important;}
+.editorial-v5 .map-v4-day{min-height:48px!important;}
+.editorial-v5 .map-screen .nearby-sheet{left:10px;right:10px;bottom:10px;z-index:880;border-radius:25px;background:rgba(250,247,240,.96);box-shadow:0 14px 38px rgba(23,35,31,.14);max-height:36dvh;overflow:hidden;}
+.editorial-v5 .map-screen .nearby-sheet.collapsed{transform:translateY(calc(100% - 62px));}
+.editorial-v5 .map-screen .sheet-handle{height:4px;width:44px;margin-bottom:8px;}
+.editorial-v5 .discover-list{max-height:24dvh;margin-top:8px;padding-right:1px;}
+.editorial-v5 .discover-card-wrap{display:grid;grid-template-columns:1fr;gap:0;background:rgba(255,255,255,.62);border:1px solid var(--line);border-radius:18px;overflow:hidden;}
+.editorial-v5 .discover-card{border:0!important;border-radius:0!important;background:transparent!important;min-height:88px;padding:12px 12px 9px;box-shadow:none!important;}
+.editorial-v5 .discover-card h3{font-family:Georgia,serif;font-size:15px;font-weight:500;}
+.editorial-v5 .discover-source-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px 10px;border-top:1px solid rgba(20,33,30,.07);font-size:9px;color:var(--muted);}
+.editorial-v5 .discover-source-row a{color:var(--teal-dark);text-decoration:none;font-weight:800;min-height:30px;display:flex;align-items:center;}
+.editorial-v5 .discover-chip{background:rgba(219,231,226,.64);}
+.editorial-v5 .discover-chip.cost{background:#efe6db;color:#755948;}
+.editorial-v5 .map-screen .add-place-fab{bottom:78px!important;background:rgba(250,247,240,.94);color:var(--ink);box-shadow:0 10px 26px rgba(23,35,31,.16);}
+.editorial-v5 .map-wrap:not(.sheet-collapsed) .add-place-fab{bottom:calc(36dvh + 26px)!important;}
+.editorial-v5 .map-screen .leaflet-bottom.leaflet-left{bottom:76px!important;}
+.editorial-v5 .map-wrap:not(.sheet-collapsed) .leaflet-bottom.leaflet-left{bottom:calc(36dvh + 22px)!important;}
+
+/* TRIP — reservation archive as an editorial index. */
+.editorial-v5 .trip-editorial-hero{position:relative;min-height:280px;margin:0 0 28px;border-radius:28px;overflow:hidden;background:#29423d;}
+.editorial-v5 .trip-editorial-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.82);}
+.editorial-v5 .trip-editorial-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,20,18,.03),rgba(8,20,18,.73));}
+.editorial-v5 .trip-editorial-copy{position:absolute;z-index:2;left:22px;right:22px;bottom:22px;color:#fff;}
+.editorial-v5 .trip-editorial-copy span{font-size:9px;letter-spacing:.16em;opacity:.72;}
+.editorial-v5 .trip-editorial-copy h2{font-family:Georgia,serif;font-size:30px;font-weight:500;margin:6px 0 4px;}
+.editorial-v5 .trip-editorial-copy p{margin:0;font-size:11px;line-height:1.5;color:rgba(255,255,255,.78);}
+.editorial-v5 .truth-card{background:transparent;border:1px solid var(--line);box-shadow:none;}
+.editorial-v5 .trip-list{border-top:1px solid var(--line);}
+.editorial-v5 .trip-item{border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:17px 4px!important;margin:0!important;}
+.editorial-v5 .trip-item.is-expanded{background:transparent!important;margin-bottom:8px!important;}
+.editorial-v5 .trip-extra{border:0;border-radius:20px;background:rgba(250,247,240,.72);margin:0 0 18px;}
+.editorial-v5 .ticket-open-button{background:transparent;border:1px solid rgba(53,95,90,.22);color:var(--teal-dark);}
+.editorial-v5 .conflict-card{background:#efe9df;border:0;box-shadow:none;}
+
+/* STORY — one big image, then quiet editorial notes. */
+.editorial-v5 .story-city-rail{margin-bottom:7px;}
+.editorial-v5 .story-city-pill{background:transparent;border-color:var(--line);}
+.editorial-v5 .story-city-pill.active{background:var(--ink);}
+.editorial-v5 .story-v4-hero{min-height:61dvh;max-height:690px;border-radius:29px;box-shadow:none;margin-top:8px;}
+.editorial-v5 .story-v4-copy{left:24px;right:24px;bottom:26px;}
+.editorial-v5 .story-v4-copy h2{font-size:32px;}
+.editorial-v5 .story-v4-play{background:rgba(250,247,240,.13);}
+.editorial-v5 .story-facts{display:block;margin-top:28px;border-top:1px solid var(--line);}
+.editorial-v5 .story-fact{display:grid;grid-template-columns:32px 1fr;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:17px 2px;}
+.editorial-v5 .story-fact span{background:transparent;border:1px solid var(--line);border-radius:50%;}
+.editorial-v5 .story-quest-v4{margin-top:28px;background:#dce7e2;border-radius:22px;}
+
+@media(max-width:390px){
+  .editorial-v5 .hero-card{min-height:63dvh;}
+  .editorial-v5 .hero-content h1{font-size:58px;}
+  .editorial-v5 .city-rail{grid-auto-columns:84%;}
+  .editorial-v5 .city-chip{min-height:228px;}
+  .editorial-v5 .timeline-item{grid-template-columns:48px 15px 1fr;}
+  .editorial-v5 .timeline-card{min-height:190px;}
+  .editorial-v5 .map-v4-discover-controls{grid-template-columns:1fr!important;}
+  .editorial-v5 .map-screen .nearby-sheet{max-height:38dvh;}
+  .editorial-v5 .story-v4-hero{min-height:58dvh;}
+}
+
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;}}
