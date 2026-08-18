@@ -4,6 +4,7 @@
   if (!v4 || typeof demo === 'undefined') return;
 
   const escapeHtml = (value='') => String(value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+  const liveMap = () => (typeof map !== 'undefined' ? map : window.map);
 
   function installCss() {
     if (document.querySelector('link[href="./editorial-v5.css"]')) return;
@@ -58,7 +59,7 @@
     sheet.dataset.v5InitialState = '1';
     sheet.classList.add('collapsed');
     wrap.classList.add('sheet-collapsed');
-    setTimeout(() => window.map?.invalidateSize?.(), 60);
+    setTimeout(() => liveMap()?.invalidateSize?.(), 60);
   }
 
   function recommendationById(id) {
@@ -145,7 +146,7 @@
     document.querySelectorAll('[data-nav="map"],[data-open-screen="map"]').forEach(button => {
       button.addEventListener('click', () => setTimeout(() => {
         keepMapVisible();
-        window.map?.invalidateSize?.();
+        liveMap()?.invalidateSize?.();
       }, 120));
     });
   }
