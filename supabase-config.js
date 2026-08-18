@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.SisterTripV3Boot?.();
     await sisterTripLoadClassic('./features-v4.js');
     window.SisterTripFeaturesV4Install?.();
+    await sisterTripLoadClassic('./reservation-warning-v4.js');
+    window.SisterTripReservationWarningsV4Install?.();
   } catch (error) {
     console.error('Could not load Sister Trip enhancements', error);
   }
