@@ -1,6 +1,6 @@
-const CACHE = 'sister-trip-v2';
+const CACHE = 'sister-trip-v3';
 const CORE = [
-  './','./index.html','./styles.css','./sync.css','./app.js','./sync.js','./supabase-config.js',
+  './','./index.html','./styles.css','./map-v2.css','./sync.css','./app.js','./sync.js','./supabase-config.js',
   './manifest.webmanifest','./icon.svg'
 ];
 const REMOTE = [
@@ -8,7 +8,8 @@ const REMOTE = [
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js',
   'https://images.unsplash.com/photo-1637851058613-95f0d41c3c2f?auto=format&fit=crop&w=1600&q=88',
-  'https://images.unsplash.com/photo-1653343860295-2b07f992b7b2f?auto=format&fit=crop&w=1200&q=88'
+  'https://images.unsplash.com/photo-1653343860295-2b07f992b7b2f?auto=format&fit=crop&w=1200&q=88',
+  'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=500&q=80'
 ];
 
 self.addEventListener('install', event => {
