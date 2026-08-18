@@ -38,6 +38,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     await sisterTripLoadClassic('./editorial-v5.js');
     window.SisterTripEditorialV5Install?.();
     window.SisterTripLocalAssetsV6?.apply();
+
+    // Focused post-design QA fixes. These intentionally load last so they only
+    // correct viewport/sheet behavior and Japanese labels without restyling v5.
+    const v7css = document.createElement('link');
+    v7css.rel = 'stylesheet';
+    v7css.href = './bugfix-v7.css';
+    document.head.appendChild(v7css);
+    await sisterTripLoadClassic('./bugfix-v7.js');
+    window.SisterTripBugfixV7Install?.();
   } catch (error) {
     console.error('Could not load Sister Trip enhancements', error);
   }
