@@ -1,7 +1,7 @@
-const CACHE = 'sister-trip-v8';
+const CACHE = 'sister-trip-v9';
 const CORE = [
   './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css',
-  './app.js','./trip-data.js','./image-stability.js','./map-v3.js','./shared-v2.js','./sync.js','./supabase-config.js',
+  './app.js','./trip-data.js','./trip-data-imagekeys.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./sync.js','./supabase-config.js',
   './manifest.webmanifest','./icon.svg'
 ];
 const REMOTE = [
@@ -20,9 +20,6 @@ const REMOTE = [
   'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=700&q=84'
 ];
 
-const fallbackSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#18332f"/><stop offset="1" stop-color="#6f9691"/></linearGradient></defs><rect width="1200" height="800" fill="url(#g)"/><circle cx="820" cy="250" r="150" fill="#f4e8c9" opacity=".14"/><path d="M0 610 C250 520 430 690 690 570 S1010 510 1200 420 V800 H0Z" fill="#f6f1e8" opacity=".12"/></svg>`;
-const fallbackImage = () => new Response(fallbackSvg, {headers:{'Content-Type':'image/svg+xml','Cache-Control':'public, max-age=86400'}});
-
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
@@ -40,7 +37,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(keys.filter(k => k !== CACHE && k !== 'sister-trip-images-v1').map(k => caches.delete(k)));
+    await Promise.all(keys.filter(k => k !== CACHE && k !== 'sister-trip-images-v2').map(k => caches.delete(k)));
     self.clients.claim();
   })());
 });
@@ -71,6 +68,7 @@ self.addEventListener('fetch', event => {
         })());
         return cached;
       }
+
       try {
         const response = await fetch(event.request);
         if (response.ok || response.type === 'opaque') {
@@ -78,9 +76,13 @@ self.addEventListener('fetch', event => {
           await cache.put(event.request, response.clone());
           return response;
         }
-        return fallbackImage();
+        // Keep the failed status. The page-level image layer will move to the next
+        // spot candidate, then city candidate, then its built-in final fallback.
+        return response;
       } catch (_) {
-        return fallbackImage();
+        // Returning an error response is intentional: <img> must fire `error`
+        // so image-stability.js can advance through the ordered fallback chain.
+        return new Response('', {status:504, statusText:'Image unavailable'});
       }
     })());
     return;
