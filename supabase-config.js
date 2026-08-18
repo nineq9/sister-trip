@@ -26,8 +26,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     await sisterTripLoadClassic('./map-v3.js');
     await sisterTripLoadClassic('./map-image-bridge.js');
     await sisterTripLoadClassic('./shared-v2.js');
+    await sisterTripLoadClassic('./discover-data.js');
     window.SisterTripV3Boot?.();
+    await sisterTripLoadClassic('./features-v4.js');
+    window.SisterTripFeaturesV4Install?.();
   } catch (error) {
-    console.error('Could not load Sister Trip v3 enhancements', error);
+    console.error('Could not load Sister Trip enhancements', error);
   }
 });
