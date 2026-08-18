@@ -1,4 +1,4 @@
-const CACHE = 'sister-trip-v15';
+const CACHE = 'sister-trip-v16';
 const CORE = [
   './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css','./features-v4.css','./editorial-v5.css','./bugfix-v7.css',
   './app.js','./trip-data.js','./trip-data-imagekeys.js','./local-assets-v6.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./discover-data.js','./editorial-v5-data.js','./reservation-truth-v4.js','./features-v4.js','./reservation-warning-v4.js','./editorial-v5.js','./bugfix-v7.js','./sync.js','./supabase-config.js',
