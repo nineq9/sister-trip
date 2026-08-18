@@ -1,4 +1,4 @@
-const CACHE = 'sister-trip-v7';
+const CACHE = 'sister-trip-v8';
 const CORE = [
   './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css',
   './app.js','./trip-data.js','./image-stability.js','./map-v3.js','./shared-v2.js','./sync.js','./supabase-config.js',
