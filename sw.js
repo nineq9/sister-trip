@@ -1,7 +1,7 @@
-const CACHE = 'sister-trip-v12';
+const CACHE = 'sister-trip-v13';
 const CORE = [
-  './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css','./features-v4.css',
-  './app.js','./trip-data.js','./trip-data-imagekeys.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./discover-data.js','./reservation-truth-v4.js','./features-v4.js','./reservation-warning-v4.js','./sync.js','./supabase-config.js',
+  './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css','./features-v4.css','./editorial-v5.css',
+  './app.js','./trip-data.js','./trip-data-imagekeys.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./discover-data.js','./editorial-v5-data.js','./reservation-truth-v4.js','./features-v4.js','./reservation-warning-v4.js','./editorial-v5.js','./sync.js','./supabase-config.js',
   './manifest.webmanifest','./icon.svg'
 ];
 const REMOTE = [
