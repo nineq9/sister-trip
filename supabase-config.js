@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await sisterTripLoadClassic('./map-image-bridge.js');
     await sisterTripLoadClassic('./shared-v2.js');
     await sisterTripLoadClassic('./discover-data.js');
+    await sisterTripLoadClassic('./reservation-truth-v4.js');
     window.SisterTripV3Boot?.();
     await sisterTripLoadClassic('./features-v4.js');
     window.SisterTripFeaturesV4Install?.();
