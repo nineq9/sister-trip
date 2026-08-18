@@ -109,7 +109,7 @@
   }
 
   function patchTripData() {
-    if (!window.demo) return;
+    if (typeof demo === 'undefined') return;
     for (const city of demo.cities || []) {
       const key = city.id || cityFromText(city.name);
       if (catalog[key]?.[0]) city.image = catalog[key][0];
@@ -119,7 +119,7 @@
       if (!place.image || /1653343860295|1597982437463/.test(place.image)) place.image = catalog[key]?.[0] || place.image;
       place.fallbackImage = catalog[key]?.[0] || null;
     }
-    for (const [dayKey, day] of Object.entries(demo.dayPlans || {})) {
+    for (const day of Object.values(demo.dayPlans || {})) {
       const city = day.city || 'paris';
       for (const item of day.items || []) {
         if (!item.image) item.image = catalog[city]?.[0] || null;
