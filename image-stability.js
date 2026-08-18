@@ -38,8 +38,6 @@
     ]
   };
 
-  // Two independently hosted candidates for each Paris stop that appears in the 12 Sep plan.
-  // Wikimedia Commons Special:FilePath keeps the application URL stable even when previews change.
   const spotCatalog = {
     'saint-sulpice': [
       commonsFile('Saint-Sulpice @ Paris (23900233582).jpg'),
@@ -102,6 +100,28 @@
     return null;
   }
 
+  function spotFromUrl(value='') {
+    const url = String(value);
+    if (!url) return null;
+    for (const [spot, urls] of Object.entries(spotCatalog)) {
+      if (urls.some(candidate => candidate === url)) return spot;
+    }
+    try {
+      const decoded = decodeURIComponent(url).toLowerCase();
+      return spotFromText(decoded);
+    } catch (_) {
+      return spotFromText(url);
+    }
+  }
+
+  function contextTextFor(img) {
+    const timelinePlace = img.closest('[data-timeline-place]')?.dataset.timelinePlace || '';
+    const selectedTitle = img.closest('.selected-place-card')?.querySelector('h2')?.textContent || '';
+    const nearbyTitle = img.closest('.nearby-card')?.querySelector('strong')?.textContent || '';
+    const cardTitle = img.closest('.timeline-card')?.querySelector('h3')?.textContent || '';
+    return `${timelinePlace} ${selectedTitle} ${nearbyTitle} ${cardTitle}`;
+  }
+
   function escapeXml(value='') {
     return String(value).replace(/[<>&'\"]/g, ch => ({'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','\"':'&quot;'}[ch]));
   }
@@ -125,22 +145,22 @@
   }
 
   function candidatesFor(img) {
-    const explicitSpot = img.dataset.spot || img.closest('[data-spot]')?.dataset.spot || '';
-    const spot = spotFromText(`${explicitSpot} ${img.alt || ''}`);
-    const city = cityFromText(`${img.dataset.city || ''} ${img.closest('[data-city]')?.dataset.city || ''} ${img.alt || ''} ${explicitSpot}`);
     const current = img.currentSrc || img.src;
+    const explicitSpot = img.dataset.spot || img.closest('[data-spot]')?.dataset.spot || '';
+    const context = contextTextFor(img);
+    const spot = spotFromText(`${explicitSpot} ${img.alt || ''} ${context}`) || spotFromUrl(current);
+    const city = cityFromText(`${img.dataset.city || ''} ${img.closest('[data-city]')?.dataset.city || ''} ${img.alt || ''} ${explicitSpot} ${context}`);
     const candidates = [];
 
-    // Important: if we know the spot, do NOT start with a generic current city image.
-    // The spot's own two candidates always win.
     if (spot && spotCatalog[spot]) {
       for (const url of spotCatalog[spot]) if (!candidates.includes(url)) candidates.push(url);
+      if (!img.dataset.spot) img.dataset.spot = spot;
     } else if (current && !current.startsWith('data:image/')) {
       candidates.push(current);
     }
 
     for (const url of catalog[city] || []) if (!candidates.includes(url)) candidates.push(url);
-    candidates.push(builtInFallback(city, img.alt || explicitSpot || 'SISTER TRIP'));
+    candidates.push(builtInFallback(city, img.alt || explicitSpot || context || 'SISTER TRIP'));
     return {city, spot, candidates};
   }
 
@@ -157,7 +177,6 @@
     const currentIndex = candidates.indexOf(current);
     img.dataset.imageAttempt = String(Math.max(currentIndex, 0));
 
-    // If a spot is known but the rendered src is still a city-generic image, replace it immediately.
     if (spot && spotCatalog[spot]?.[0] && current !== spotCatalog[spot][0] && !spotCatalog[spot].includes(current)) {
       img.dataset.imageAttempt = '0';
       img.src = spotCatalog[spot][0];
@@ -257,5 +276,5 @@
     warmCache();
   }
 
-  window.SisterTripImages = {catalog, spotCatalog, install, protectImage, patchTripData, warmCache, builtInFallback, spotFromText};
+  window.SisterTripImages = {catalog, spotCatalog, install, protectImage, patchTripData, warmCache, builtInFallback, spotFromText, spotFromUrl};
 })();
