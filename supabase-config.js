@@ -3,8 +3,7 @@ window.SISTER_TRIP_CONFIG = {
   supabaseKey: 'sb_publishable_RXzsdpeYTmd-VvONxwV7Lg_131N_Wve'
 };
 
-// Load the travel master data and map-first UI after the base app has parsed.
-// Keeping these as separate layers makes it easy to update the trip without destabilizing the locked visual foundation.
+// Load the travel master data and progressively enhanced UI after the base app has parsed.
 function sisterTripLoadClassic(src) {
   return new Promise((resolve, reject) => {
     if (document.querySelector(`script[src="${src}"]`)) return resolve();
@@ -27,12 +26,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     await sisterTripLoadClassic('./map-image-bridge.js');
     await sisterTripLoadClassic('./shared-v2.js');
     await sisterTripLoadClassic('./discover-data.js');
+    await sisterTripLoadClassic('./editorial-v5-data.js');
     await sisterTripLoadClassic('./reservation-truth-v4.js');
     window.SisterTripV3Boot?.();
     await sisterTripLoadClassic('./features-v4.js');
     window.SisterTripFeaturesV4Install?.();
     await sisterTripLoadClassic('./reservation-warning-v4.js');
     window.SisterTripReservationWarningsV4Install?.();
+    await sisterTripLoadClassic('./editorial-v5.js');
+    window.SisterTripEditorialV5Install?.();
   } catch (error) {
     console.error('Could not load Sister Trip enhancements', error);
   }
