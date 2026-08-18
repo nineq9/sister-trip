@@ -20,14 +20,56 @@ const demo = {
     {time:'20:10', title:'AURA Invalides', meta:'有料・時間指定 · LOCKED', status:'locked', image:'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80'},
   ],
   mapPlaces: [
-    {id:'eiffel', name:'Eiffel Tower', lat:48.85837, lng:2.29448, tag:'today', code:'E'},
-    {id:'orsay', name:"Musée d’Orsay", lat:48.85996, lng:2.32656, tag:'today', code:'O'},
-    {id:'invalides', name:'Invalides', lat:48.8566, lng:2.3126, tag:'today', code:'I'},
-    {id:'montmartre', name:'Montmartre', lat:48.8867, lng:2.3431, tag:'wish', code:'M'},
-    {id:'opera', name:'Palais Garnier', lat:48.87197, lng:2.3316, tag:'wish', code:'G'},
-    {id:'louvre', name:'Louvre', lat:48.8606, lng:2.3376, tag:'today', code:'L'},
-    {id:'stay', name:'Stay · approximate', lat:48.8687, lng:2.4178, tag:'stay', code:'⌂'},
+    {
+      id:'eiffel', name:'Eiffel Tower', lat:48.85837, lng:2.29448, tag:'today', code:'E',
+      eyebrow:'TODAY · NIGHT', badge:'今夜', meta:'夜のパリ · FLEX',
+      description:'見る時間で印象が変わる場所。夜のルートと物語をここから確認できます。',
+      image:'https://images.unsplash.com/photo-1653343860295-2b07f992b7b2f?auto=format&fit=crop&w=700&q=88', action:'story'
+    },
+    {
+      id:'orsay', name:"Musée d’Orsay", lat:48.85996, lng:2.32656, tag:'today', code:'O',
+      eyebrow:'TODAY · LOCKED', badge:'10:15', meta:'予約あり · 時間固定',
+      description:'ここは動かさない予定。前後のFLEXだけを組み替える基準点になります。',
+      image:'https://images.unsplash.com/photo-1565099824688-e93eb20fe622?auto=format&fit=crop&w=700&q=88', action:'today'
+    },
+    {
+      id:'invalides', name:'Invalides', lat:48.8566, lng:2.3126, tag:'today', code:'I',
+      eyebrow:'TODAY · FLEX', badge:'17:00', meta:'ナポレオンの物語 · FLEX',
+      description:'AURAまでの流れを壊さず調整できる場所。疲れた日は滞在時間を短くできます。',
+      image:'https://images.unsplash.com/photo-1549144511-f099e773c147?auto=format&fit=crop&w=700&q=88', action:'today'
+    },
+    {
+      id:'montmartre', name:'Montmartre', lat:48.8867, lng:2.3431, tag:'wish', code:'M',
+      eyebrow:'WISH · SUNSET', badge:'行きたい', meta:'夕暮れ候補 · WISH',
+      description:'時間と天気が合えば入れたい候補。固定予定のすき間に入るかをアプリ側で判断します。',
+      image:'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=700&q=88', action:'wish'
+    },
+    {
+      id:'opera', name:'Palais Garnier', lat:48.87197, lng:2.3316, tag:'wish', code:'G',
+      eyebrow:'WISH · RIGHT BANK', badge:'行きたい', meta:'右岸ルート · WISH',
+      description:'周辺の保存スポットとまとめやすい候補。近くへ来たときに優先表示します。',
+      image:'https://images.unsplash.com/photo-1549144511-f099e773c147?auto=format&fit=crop&w=700&q=88', action:'wish'
+    },
+    {
+      id:'louvre', name:'Louvre', lat:48.8606, lng:2.3376, tag:'today', code:'L',
+      eyebrow:'16 SEP · LOCKED', badge:'17:00', meta:'予約枠 · LOCKED',
+      description:'予約時間を動かさず、その前後のルートを組み替える基準にします。',
+      image:'https://images.unsplash.com/photo-1565099824688-e93eb20fe622?auto=format&fit=crop&w=700&q=88', action:'today'
+    },
+    {
+      id:'stay', name:'Paris stay', lat:48.8687, lng:2.4178, tag:'stay', code:'⌂',
+      eyebrow:'BASE · STAY', badge:'HOME', meta:'旅の拠点',
+      description:'毎日の出発点と帰着点。正確な住所などの非公開情報は認証後だけ表示します。',
+      image:'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=700&q=88', action:'trip'
+    },
   ],
+  nearbyWish: {
+    name:'妹1の保存スポット',
+    meta:'カフェ · FLEXに追加可能',
+    walk:'徒歩 7分',
+    wishers:['1','A'],
+    image:'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=500&q=80'
+  },
   tripItems: [
     {type:'stay', icon:'⌂', title:'Paris stay', meta:'7 nights · 詳細は非公開データから表示', verified:true},
     {type:'move', icon:'↗', title:'Paris → Zürich', meta:'Night bus · LOCKED', verified:true},
@@ -51,6 +93,7 @@ let map;
 let markers = [];
 let currentMapFilter = 'all';
 let currentTripFilter = 'all';
+let selectedMapPlaceId = null;
 
 function daysUntilTrip() {
   const now = new Date();
@@ -127,6 +170,107 @@ function initNavigation() {
   $$('[data-open-screen]').forEach(btn => btn.addEventListener('click', () => switchScreen(btn.dataset.openScreen)));
 }
 
+function prepareMapExperience() {
+  if (!$('#mapV2Styles')) {
+    const link = document.createElement('link');
+    link.id = 'mapV2Styles';
+    link.rel = 'stylesheet';
+    link.href = './map-v2.css';
+    document.head.appendChild(link);
+  }
+  const sheet = $('.nearby-sheet');
+  const wrap = $('.map-wrap');
+  if (sheet && wrap && sheet.parentElement !== wrap) wrap.appendChild(sheet);
+  renderMapSheet();
+}
+
+function renderMapSheet(placeId = selectedMapPlaceId) {
+  const sheet = $('.nearby-sheet');
+  if (!sheet) return;
+  const place = placeId ? demo.mapPlaces.find(p => p.id === placeId) : null;
+
+  if (!place) {
+    const nearby = demo.nearbyWish;
+    sheet.classList.remove('place-mode');
+    sheet.innerHTML = `
+      <div class="sheet-handle"></div>
+      <div class="sheet-heading">
+        <div>
+          <p class="eyebrow">NEARBY WISH</p>
+          <h2>この辺で寄れそう</h2>
+        </div>
+        <span class="distance-badge">${nearby.walk}</span>
+      </div>
+      <article class="nearby-card map-sheet-card">
+        <img class="map-sheet-photo" src="${nearby.image}" alt="${nearby.name}" />
+        <div class="nearby-copy">
+          <strong>${nearby.name}</strong>
+          <span>${nearby.meta}</span>
+          <div class="wishers">${nearby.wishers.map(x => `<span>${x}</span>`).join('')}<em>${nearby.wishers.length}人が気になる</em></div>
+        </div>
+        <button class="small-plus" type="button" data-quick-add aria-label="FLEX候補に追加">＋</button>
+      </article>`;
+  } else {
+    sheet.classList.add('place-mode');
+    const actionLabel = place.action === 'story' ? '物語を見る' : place.action === 'trip' ? 'TRIPで見る' : place.action === 'wish' ? 'FLEX候補に' : '今日の予定';
+    sheet.innerHTML = `
+      <div class="sheet-handle"></div>
+      <article class="selected-place-card">
+        <img class="selected-place-photo" src="${place.image}" alt="${place.name}" />
+        <div class="selected-place-copy">
+          <div class="selected-place-kicker"><span>${place.eyebrow}</span><b>${place.badge}</b></div>
+          <h2>${place.name}</h2>
+          <p class="selected-place-meta">${place.meta}</p>
+          <p class="selected-place-description">${place.description}</p>
+        </div>
+      </article>
+      <div class="map-sheet-actions">
+        <button class="map-sheet-secondary" type="button" data-map-close>近くを見る</button>
+        <button class="map-sheet-primary" type="button" data-map-action="${place.action}">${actionLabel}<span>→</span></button>
+      </div>`;
+  }
+
+  $('[data-quick-add]', sheet)?.addEventListener('click', () => showToast('WISHをFLEX候補に追加しました'));
+  $('[data-map-close]', sheet)?.addEventListener('click', clearMapPlaceSelection);
+  $('[data-map-action]', sheet)?.addEventListener('click', (event) => {
+    const action = event.currentTarget.dataset.mapAction;
+    if (action === 'story') {
+      $('#storyDialog')?.showModal();
+    } else if (action === 'trip') {
+      switchScreen('trip');
+    } else if (action === 'wish') {
+      showToast(`${place.name} をFLEX候補に追加しました`);
+    } else {
+      switchScreen('today');
+    }
+  });
+}
+
+function updateSelectedMarkerStyles() {
+  markers.forEach(({marker, place}) => {
+    const bubble = marker.getElement()?.querySelector('.pin-bubble');
+    if (bubble) bubble.classList.toggle('selected', place.id === selectedMapPlaceId);
+  });
+}
+
+function selectMapPlace(placeId) {
+  const place = demo.mapPlaces.find(p => p.id === placeId);
+  if (!place) return;
+  selectedMapPlaceId = placeId;
+  updateSelectedMarkerStyles();
+  renderMapSheet(placeId);
+  if (map) {
+    const targetZoom = Math.max(map.getZoom(), 14);
+    map.flyTo([place.lat, place.lng], targetZoom, {duration:.35});
+  }
+}
+
+function clearMapPlaceSelection() {
+  selectedMapPlaceId = null;
+  updateSelectedMarkerStyles();
+  renderMapSheet();
+}
+
 function initMap() {
   if (!window.L || !navigator.onLine) {
     showOfflineMap();
@@ -138,24 +282,32 @@ function initMap() {
     attribution:'© OpenStreetMap'
   }).addTo(map);
   L.control.zoom({position:'bottomleft'}).addTo(map);
+  map.on('click', clearMapPlaceSelection);
   renderMapMarkers('all');
 }
 
 function renderMapMarkers(filter) {
   if (!map) return;
-  markers.forEach(m => map.removeLayer(m));
+  markers.forEach(({marker}) => map.removeLayer(marker));
   markers = [];
   const points = demo.mapPlaces.filter(p => filter === 'all' || p.tag === filter || (filter === 'today' && p.tag === 'stay'));
   points.forEach(p => {
     const icon = L.divIcon({
       className:'custom-pin',
-      html:`<div class="pin-bubble ${p.tag}">${p.code}</div>`,
+      html:`<div class="pin-bubble ${p.tag} ${p.id === selectedMapPlaceId ? 'selected' : ''}">${p.code}</div>`,
       iconSize:[42,42], iconAnchor:[21,21]
     });
-    const marker = L.marker([p.lat,p.lng], {icon}).addTo(map).bindPopup(`<strong>${p.name}</strong><br><span style="font-size:11px;color:#68736e">${p.tag === 'wish' ? 'WISH · 行けたら' : p.tag === 'stay' ? 'STAY · 拠点' : 'TODAY'}</span>`);
-    markers.push(marker);
+    const marker = L.marker([p.lat,p.lng], {icon, title:p.name, bubblingMouseEvents:false}).addTo(map);
+    marker.on('click', () => selectMapPlace(p.id));
+    markers.push({marker, place:p});
   });
-  if (points.length) map.fitBounds(L.latLngBounds(points.map(p => [p.lat,p.lng])), {padding:[45,45], maxZoom:14});
+  if (points.length) {
+    map.fitBounds(L.latLngBounds(points.map(p => [p.lat,p.lng])), {
+      paddingTopLeft:[42,42],
+      paddingBottomRight:[42,190],
+      maxZoom:14
+    });
+  }
 }
 
 function showOfflineMap() {
@@ -179,6 +331,8 @@ function initFilters() {
     $$('#mapFilters button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentMapFilter = btn.dataset.filter;
+    selectedMapPlaceId = null;
+    renderMapSheet();
     renderMapMarkers(currentMapFilter);
   }));
   $$('#tripFilters button').forEach(btn => btn.addEventListener('click', () => {
@@ -219,7 +373,6 @@ function initAddPlace() {
     e.currentTarget.reset();
     showToast(`${item.member} の「${item.place}」を保存しました`);
   });
-  $$('[data-quick-add]').forEach(btn => btn.addEventListener('click', () => showToast('WISHに追加しました')));
 }
 
 function initStories() {
@@ -271,6 +424,7 @@ function init() {
   renderTrip();
   renderQuests();
   initNavigation();
+  prepareMapExperience();
   initFilters();
   initReplan();
   initAddPlace();
