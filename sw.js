@@ -1,6 +1,7 @@
-const CACHE = 'sister-trip-v4';
+const CACHE = 'sister-trip-v5';
 const CORE = [
-  './','./index.html','./styles.css','./map-v2.css','./sync.css','./app.js','./sync.js','./supabase-config.js',
+  './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css',
+  './app.js','./trip-data.js','./map-v3.js','./sync.js','./supabase-config.js',
   './manifest.webmanifest','./icon.svg'
 ];
 const REMOTE = [
@@ -8,11 +9,18 @@ const REMOTE = [
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js',
   'https://images.unsplash.com/photo-1637851058613-95f0d41c3c2f?auto=format&fit=crop&w=1600&q=88',
-  'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=500&q=80'
+  'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=900&q=86',
+  'https://images.unsplash.com/photo-1527668752968-14dc70a27c95?auto=format&fit=crop&w=900&q=86',
+  'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=900&q=86',
+  'https://images.unsplash.com/photo-1520175480921-4edfa2983e0f?auto=format&fit=crop&w=900&q=86',
+  'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=900&q=86',
+  'https://images.unsplash.com/photo-1541370976299-4d24ebbc9077?auto=format&fit=crop&w=900&q=86',
+  'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=900&q=86',
+  'https://images.unsplash.com/photo-1565099824688-e93eb20fe622?auto=format&fit=crop&w=700&q=84',
+  'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=700&q=84'
 ];
 
-// Some Unsplash image IDs used by the first prototype can disappear or return an error.
-// Keep the UI stable by transparently replacing known broken URLs with durable Commons files.
+// Some external photos can disappear. Replace known unstable URLs and always keep a visual fallback.
 const IMAGE_REPLACEMENTS = new Map([
   ['https://images.unsplash.com/photo-1653343860295-2b07f992b7b2f?auto=format&fit=crop&w=1200&q=88', 'https://commons.wikimedia.org/wiki/Special:FilePath/Eiffel%20Tower%20sunset.jpg?width=1400'],
   ['https://images.unsplash.com/photo-1653343860295-2b07f992b7b2f?auto=format&fit=crop&w=700&q=88', 'https://commons.wikimedia.org/wiki/Special:FilePath/Eiffel%20Tower%20sunset.jpg?width=900'],
@@ -27,8 +35,10 @@ self.addEventListener('install', event => {
     const cache = await caches.open(CACHE);
     await cache.addAll(CORE);
     await Promise.allSettled(REMOTE.map(async url => {
-      const response = await fetch(url, {mode:'cors'});
-      if (response.ok) await cache.put(url, response);
+      try {
+        const response = await fetch(url, {mode:'cors'});
+        if (response.ok) await cache.put(url, response);
+      } catch (_) {}
     }));
     self.skipWaiting();
   })());
@@ -46,6 +56,7 @@ self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
   const isTile = url.hostname.includes('tile.openstreetmap.org');
+
   if (isTile) {
     event.respondWith(fetch(event.request).catch(() => new Response('', {status:503})));
     return;
