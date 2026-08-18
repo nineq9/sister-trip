@@ -1,7 +1,7 @@
-const CACHE = 'sister-trip-v9';
+const CACHE = 'sister-trip-v10';
 const CORE = [
-  './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css',
-  './app.js','./trip-data.js','./trip-data-imagekeys.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./sync.js','./supabase-config.js',
+  './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css','./features-v4.css',
+  './app.js','./trip-data.js','./trip-data-imagekeys.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./discover-data.js','./features-v4.js','./sync.js','./supabase-config.js',
   './manifest.webmanifest','./icon.svg'
 ];
 const REMOTE = [
@@ -76,12 +76,8 @@ self.addEventListener('fetch', event => {
           await cache.put(event.request, response.clone());
           return response;
         }
-        // Keep the failed status. The page-level image layer will move to the next
-        // spot candidate, then city candidate, then its built-in final fallback.
         return response;
       } catch (_) {
-        // Returning an error response is intentional: <img> must fire `error`
-        // so image-stability.js can advance through the ordered fallback chain.
         return new Response('', {status:504, statusText:'Image unavailable'});
       }
     })());
