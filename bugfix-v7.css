@@ -1,7 +1,6 @@
-/* Sister Trip v8 — focused Safari QA fixes for MAP and TRIP only. */
+/* Sister Trip v9 — MAP control consolidation + Safari recommendation readability + TRIP repair. */
 
-/* MAP: keep the map fixed, but make the WHOLE recommendation sheet scrollable.
-   iOS Safari is much more reliable with one scroll container than a nested list. */
+/* Keep MAP as one viewport; the recommendation sheet is the only vertical scroller. */
 body.sister-map-active{
   height:100dvh;
   overflow:hidden!important;
@@ -13,85 +12,220 @@ body.sister-map-active .app-shell{
   overflow:hidden;
 }
 body.sister-map-active main{min-height:0;}
-
 .editorial-v5 .map-screen.active{
   height:calc(100dvh - 66px)!important;
   min-height:0!important;
-  padding-bottom:calc(var(--nav-h) + var(--safe-bottom))!important;
   overflow:hidden!important;
+  padding-bottom:calc(var(--nav-h) + var(--safe-bottom))!important;
 }
 .editorial-v5 .map-screen .map-wrap{
   min-height:0!important;
   overflow:hidden!important;
 }
 
+/* One quiet control bar instead of four separate floating controls. */
+.editorial-v5 .map-screen .map-header-panel{
+  top:10px!important;
+  left:12px!important;
+  right:12px!important;
+  z-index:900!important;
+  pointer-events:none!important;
+}
+body.map-unified-ready .map-screen .map-v3-toolbar,
+body.map-unified-ready .map-screen .map-v4-discover-controls{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+.map-unified-bar{
+  pointer-events:auto;
+  display:grid;
+  grid-template-columns:minmax(92px,.9fr) minmax(138px,1.35fr) minmax(88px,.85fr);
+  align-items:stretch;
+  min-height:54px;
+  padding:4px;
+  border:1px solid rgba(20,33,30,.09);
+  border-radius:22px;
+  background:rgba(250,247,240,.95);
+  box-shadow:0 10px 28px rgba(23,35,31,.12);
+  backdrop-filter:blur(20px) saturate(1.06);
+  -webkit-backdrop-filter:blur(20px) saturate(1.06);
+}
+.map-unified-field{
+  position:relative;
+  min-width:0;
+  display:flex;
+  align-items:center;
+}
+.map-unified-field + .map-unified-field::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:11px;
+  bottom:11px;
+  width:1px;
+  background:rgba(20,33,30,.08);
+}
+.map-unified-field::after{
+  content:'⌄';
+  position:absolute;
+  right:9px;
+  top:50%;
+  transform:translateY(-53%);
+  color:#66736e;
+  font-size:12px;
+  pointer-events:none;
+}
+.map-unified-field select{
+  appearance:none;
+  -webkit-appearance:none;
+  width:100%;
+  min-width:0;
+  height:46px;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--ink);
+  padding:0 25px 0 11px;
+  font:inherit;
+  font-size:11px;
+  font-weight:820;
+  text-align:left;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  touch-action:manipulation;
+}
+.map-unified-field.context select{font-size:10.5px;}
+
+/* Recommendation sheet: every sentence/source stays readable. */
 .editorial-v5 .map-screen .nearby-sheet{
   display:block!important;
-  max-height:min(68dvh, calc(100% - 126px))!important;
+  max-height:min(68dvh, calc(100% - 88px))!important;
   overflow-y:auto!important;
   overflow-x:hidden!important;
   overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
   touch-action:pan-y;
-  padding-bottom:calc(22px + env(safe-area-inset-bottom))!important;
-  transition:transform .28s cubic-bezier(.2,.8,.2,1),max-height .28s ease,box-shadow .28s ease!important;
+  padding:8px 14px calc(24px + env(safe-area-inset-bottom))!important;
+  border-radius:26px!important;
+  transition:transform .26s cubic-bezier(.2,.8,.2,1),max-height .26s ease,box-shadow .26s ease!important;
 }
 .editorial-v5 .map-screen .nearby-sheet.collapsed{
-  max-height:112px!important;
+  max-height:118px!important;
   overflow:hidden!important;
-  transform:translateY(0)!important;
 }
-.editorial-v5 .map-screen .nearby-sheet:not(.collapsed){
-  transform:translateY(0)!important;
-}
+.editorial-v5 .map-screen .nearby-sheet:not(.collapsed){transform:translateY(0)!important;}
 .editorial-v5 .map-screen .nearby-sheet .sheet-handle{
-  position:sticky;
-  top:0;
-  z-index:3;
   width:48px;
   min-height:5px;
-  margin:2px auto 9px;
-  cursor:pointer;
+  margin:1px auto 12px;
   touch-action:manipulation;
 }
 .editorial-v5 .map-screen .sheet-heading{
-  position:sticky;
-  top:12px;
-  z-index:2;
-  background:linear-gradient(180deg,rgba(250,247,240,.99) 0%,rgba(250,247,240,.96) 82%,rgba(250,247,240,0) 100%);
-  padding:2px 0 13px;
+  position:static!important;
+  background:transparent!important;
+  padding:0 2px 12px!important;
+}
+.editorial-v5 .map-screen .nearby-sheet:not(.collapsed) .sheet-heading::after{
+  content:'下へスクロールして、価格・理由・情報源まで見る';
+  display:block;
+  margin-top:6px;
+  font-size:8px;
+  line-height:1.4;
+  color:var(--muted);
 }
 .editorial-v5 .map-screen .discover-list{
   display:grid!important;
+  gap:10px!important;
+  max-height:none!important;
+  height:auto!important;
+  overflow:visible!important;
+  padding:0 1px 20px!important;
+  margin-top:2px!important;
+}
+.editorial-v5 .map-screen .discover-card-wrap{
+  display:block!important;
+  height:auto!important;
   max-height:none!important;
   overflow:visible!important;
-  padding:0 1px 18px!important;
-  margin-top:4px!important;
 }
-.editorial-v5 .map-screen .discover-card-wrap{display:grid!important;}
-.editorial-v5 .map-screen .nearby-sheet:not(.collapsed) .sheet-heading::after{
-  content:'下へスクロールしてすべて見る';
-  display:block;
-  margin-top:5px;
-  font-size:8px;
-  color:var(--muted);
-  letter-spacing:.02em;
+.editorial-v5 .map-screen .discover-card{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:start!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding:14px 13px 12px!important;
+}
+.editorial-v5 .map-screen .discover-card>div{
+  min-width:0!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+.editorial-v5 .map-screen .discover-card h3{
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  line-height:1.2!important;
+  margin:6px 0 6px!important;
+}
+.editorial-v5 .map-screen .discover-card p,
+.editorial-v5 .map-screen .discover-freshness{
+  display:block!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  -webkit-line-clamp:unset!important;
+  -webkit-box-orient:initial!important;
+  max-height:none!important;
+  height:auto!important;
+  line-height:1.55!important;
+}
+.editorial-v5 .map-screen .discover-card-meta{
+  height:auto!important;
+  overflow:visible!important;
+  margin-top:9px!important;
+}
+.editorial-v5 .map-screen .discover-source-row{
+  display:flex!important;
+  min-height:42px!important;
+  height:auto!important;
+  overflow:visible!important;
+  padding:9px 13px 11px!important;
+  line-height:1.45!important;
+}
+.editorial-v5 .map-screen .discover-source-row a{
+  flex:0 0 auto;
+  white-space:nowrap;
 }
 
-/* Controls remain tappable. */
-.editorial-v5 .map-screen .map-header-panel{pointer-events:none!important;}
-.editorial-v5 .map-screen .map-header-panel button,
-.editorial-v5 .map-screen .map-header-panel select,
-.editorial-v5 .map-screen .map-header-panel label,
-.editorial-v5 .map-v4-discover-controls{pointer-events:auto!important;}
-
-/* TRIP: restore the original three-column card layout and force text visibility. */
-.editorial-v5 #screen-trip .trip-item{
+/* TRIP root cause fix: the status class `verified` exists on BOTH the row and badge.
+   Never style the entire row as if it were the badge. */
+.editorial-v5 #screen-trip .trip-item,
+.editorial-v5 #screen-trip .trip-item.verified,
+.editorial-v5 #screen-trip .trip-item.attention,
+.editorial-v5 #screen-trip .trip-item.planned{
   display:grid!important;
   grid-template-columns:42px minmax(0,1fr) auto!important;
   column-gap:12px!important;
   align-items:center!important;
+  width:100%!important;
   min-height:88px!important;
+  visibility:visible!important;
+  opacity:1!important;
+  color:var(--ink)!important;
 }
 .editorial-v5 #screen-trip .trip-item .trip-icon{
   display:grid!important;
@@ -103,37 +237,39 @@ body.sister-map-active main{min-height:0;}
   min-width:0!important;
   visibility:visible!important;
   opacity:1!important;
-  color:var(--ink)!important;
 }
 .editorial-v5 #screen-trip .trip-item h3{
   display:block!important;
   visibility:visible!important;
   opacity:1!important;
+  position:static!important;
   margin:0 0 4px!important;
   color:var(--teal-dark)!important;
   font-size:15px!important;
-  line-height:1.25!important;
-  overflow-wrap:anywhere;
+  line-height:1.3!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
 }
 .editorial-v5 #screen-trip .trip-item p{
   display:block!important;
   visibility:visible!important;
   opacity:1!important;
+  position:static!important;
   margin:0!important;
   color:var(--muted)!important;
   font-size:11px!important;
-  line-height:1.4!important;
+  line-height:1.45!important;
+  white-space:normal!important;
 }
-.editorial-v5 #screen-trip .verified{
+.editorial-v5 #screen-trip .trip-item > .verified{
   display:inline-flex!important;
   visibility:visible!important;
   opacity:1!important;
-  white-space:nowrap;
+  white-space:nowrap!important;
   min-width:0!important;
-  align-self:center;
+  align-self:center!important;
 }
-
-/* Japanese-first headings without changing card geometry. */
 .editorial-v5 #screen-trip .page-intro .eyebrow{font-size:0;}
 .editorial-v5 #screen-trip .page-intro .eyebrow::after{content:'旅の予約・移動';font-size:9px;letter-spacing:.17em;}
 .editorial-v5 #screen-trip .truth-card .eyebrow{font-size:0;}
@@ -142,9 +278,15 @@ body.sister-map-active main{min-height:0;}
 .editorial-v5 #screen-trip .trip-editorial-copy span::after{content:'旅の予約・移動';font-size:9px;letter-spacing:.16em;}
 
 @media(max-width:390px){
-  .editorial-v5 .map-screen .nearby-sheet{max-height:min(70dvh, calc(100% - 116px))!important;}
-  .editorial-v5 #screen-trip .trip-item{grid-template-columns:38px minmax(0,1fr) auto!important;column-gap:9px!important;}
-  .editorial-v5 #screen-trip .verified{font-size:9px!important;padding-left:8px!important;padding-right:8px!important;}
+  .map-unified-bar{grid-template-columns:minmax(82px,.82fr) minmax(128px,1.38fr) minmax(78px,.8fr);}
+  .map-unified-field select{padding-left:9px;padding-right:22px;font-size:10px;}
+  .map-unified-field.context select{font-size:9.5px;}
+  .editorial-v5 .map-screen .nearby-sheet{max-height:min(70dvh, calc(100% - 82px))!important;}
+  .editorial-v5 #screen-trip .trip-item,
+  .editorial-v5 #screen-trip .trip-item.verified,
+  .editorial-v5 #screen-trip .trip-item.attention,
+  .editorial-v5 #screen-trip .trip-item.planned{grid-template-columns:38px minmax(0,1fr) auto!important;column-gap:9px!important;}
+  .editorial-v5 #screen-trip .trip-item > .verified{font-size:9px!important;padding-left:8px!important;padding-right:8px!important;}
 }
 
 @media(prefers-reduced-motion:reduce){
