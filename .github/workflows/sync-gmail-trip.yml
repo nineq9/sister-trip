@@ -1,0 +1,83 @@
+name: Sync Gmail trip reservations
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-gmail-trip.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update verified trip data
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          app = Path('app.js')
+          text = app.read_text()
+          new_items = r'''  tripItems: [
+    {type:'move', icon:'✈', title:'BEG → CDG', meta:'9/11 06:35 → 09:15 · Air Serbia JU240 · LOCKED', verified:true},
+    {type:'stay', icon:'⌂', title:'Paris stay', meta:'9/11–17 · Bagnolet · 6 nights', verified:true},
+    {type:'ticket', icon:'◇', title:'Disneyland Paris', meta:'9/14 · 1-Day / 1-Park · 大人1名 · LOCKED', verified:true},
+    {type:'ticket', icon:'◇', title:'Notre-Dame Towers', meta:'9/15 19:30 · 3名 · Paris Museum Pass枠 · LOCKED', verified:true},
+    {type:'ticket', icon:'◇', title:'Versailles', meta:'9/16 09:00 · Château Entrée A · 3名 · LOCKED', verified:true},
+    {type:'ticket', icon:'◇', title:'Sainte-Chapelle', meta:'9/17 13:00 · 3名 · 入場枠予約 · LOCKED', verified:true},
+    {type:'move', icon:'↗', title:'Paris → Zürich', meta:'9/17 22:00 → 9/18 07:35 · FlixBus · LOCKED', verified:true},
+    {type:'stay', icon:'⌂', title:'Viadukt Apartments', meta:'9/18–19 · Zürich · 3名', verified:true},
+    {type:'ticket', icon:'◇', title:'Lindt Home of Chocolate', meta:'9/18 15:00 · 3名 · CHF 51支払済み · LOCKED', verified:true},
+    {type:'move', icon:'↗', title:'SBB Saver Day Pass', meta:'9/19 00:00 → 9/20 05:00 · 2等 · Asumi · CHF 79', verified:true},
+    {type:'stay', icon:'⌂', title:'Luzern Youth Hostel', meta:'9/19–20 · 女性ドミトリー3床 · 朝食込み', verified:true},
+    {type:'move', icon:'↗', title:'Luzern → Milano', meta:'9/21 01:30 → 04:50 · FlixBus · LOCKED', verified:true},
+    {type:'stay', icon:'⌂', title:'Star Hostel San Siro Fiera', meta:'9/21–23 · Milano · トリプルルーム3名', verified:true},
+    {type:'move', icon:'↗', title:'Milano → Venezia', meta:'9/23 08:00 → 11:30 · FlixBus · LOCKED', verified:true},
+    {type:'stay', icon:'⌂', title:'S Marco Apartments', meta:'9/23–24 · Venezia Mestre · 3名', verified:true},
+    {type:'stay', icon:'⌂', title:'hu Firenze Camping in Town', meta:'9/24–25 · デラックスバンガロー · 3名', verified:true},
+    {type:'ticket', icon:'◎', title:'Europe eSIM', meta:'15日 · 5GB · データ通信のみ · 1 eSIM', verified:true},
+  ],
+  quests:'''
+          text2, n = re.subn(r"  tripItems: \[.*?\n  \],\n  quests:", new_items, text, count=1, flags=re.S)
+          if n != 1:
+              raise SystemExit('tripItems block not found exactly once')
+          app.write_text(text2)
+
+          data = Path('discover-data.js')
+          d = data.read_text()
+          marker = "match:'Disneyland Paris'"
+          if marker not in d:
+              additions = r'''
+    {match:'Disneyland Paris',ticketKey:'klook-disneyland-paris-2026-09-14',bullets:['9/14 利用・1デー1パーク（日付指定）','大人1名の予約','KlookのPDFバウチャーあり','利用日の72時間前（現地時間）までは全額返金の案内']},
+    {match:'Notre-Dame Towers',ticketKey:'notre-dame-towers-2026-09-15',bullets:['9/15 19:30・3名','Paris Museum Pass利用の予約枠','遅刻すると予約取消の案内','南塔は424段・高さ69m・エレベーターなし','この券だけでは大聖堂本体への入場券にはならない']},
+    {match:'Versailles',ticketKey:'versailles-2026-09-16',bullets:['9/16 09:00・3名','Château - Entrée A / Pavillon Dufour','Billet Passeport・無料対象者3名','庭園は含まれない']},
+    {match:'Sainte-Chapelle',ticketKey:'sainte-chapelle-2026-09-17',bullets:['9/17 13:00・3名','これは入場券ではなく時間枠予約','別途すでに購入済みの入場券を提示する必要あり','セキュリティチェックで遅延する場合あり']},
+    {match:'Lindt Home of Chocolate',ticketKey:'lindt-zurich-2026-09-18',bullets:['9/18 15:00・Chocolate museum','大人3名','合計 CHF 51 支払済み']},
+    {match:'SBB Saver Day Pass',ticketKey:'sbb-saver-day-pass-2026-09-19',bullets:['9/19 00:00〜9/20 05:00 有効','Saver Day Pass・2等・Full fare','Asumi 1名','CHF 79','GA Travelcard area対象路線で有効','交換不可・返金は例外時のみ']},'''
+              d2, n = re.subn(r"\n  \];\n\n  window\.SisterTripV4Data", additions + "\n  ];\n\n  window.SisterTripV4Data", d, count=1)
+              if n != 1:
+                  raise SystemExit('reservationDetails end not found exactly once')
+              data.write_text(d2)
+
+          sw = Path('sw.js')
+          s = sw.read_text()
+          s = re.sub(r"const CACHE = 'sister-trip-v\d+';", "const CACHE = 'sister-trip-v19';", s, count=1)
+          sw.write_text(s)
+
+      - name: Validate JavaScript syntax
+        run: |
+          node --check app.js
+          node --check discover-data.js
+          node --check sw.js
+      - name: Commit synced reservations
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app.js discover-data.js sw.js
+          git diff --cached --quiet && exit 0
+          git commit -m "Sync verified Gmail reservations into Sister Trip"
+          git push
