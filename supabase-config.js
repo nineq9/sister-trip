@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     await sisterTripLoadClassic('./map-image-bridge.js');
     await sisterTripLoadClassic('./shared-v2.js');
     await sisterTripLoadClassic('./discover-data.js');
+    await sisterTripLoadClassic('./gmail-trip-sync.js');
+    window.SisterTripApplyGmailSnapshot?.();
     await sisterTripLoadClassic('./editorial-v5-data.js');
     await sisterTripLoadClassic('./reservation-truth-v4.js');
     window.SisterTripV3Boot?.();
