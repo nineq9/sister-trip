@@ -50,6 +50,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.head.appendChild(v7css);
     await sisterTripLoadClassic('./bugfix-v7.js');
     window.SisterTripBugfixV7Install?.();
+
+    // Build v8 adds only the requested Firenze PLAN, secure ticket vault and
+    // sister onboarding refinements. It intentionally runs after the visual lock.
+    const v8css = document.createElement('link');
+    v8css.rel = 'stylesheet';
+    v8css.href = './build-v8.css';
+    document.head.appendChild(v8css);
+    await sisterTripLoadClassic('./build-v8.js');
+    window.SisterTripBuildV8Install?.();
   } catch (error) {
     console.error('Could not load Sister Trip enhancements', error);
   }

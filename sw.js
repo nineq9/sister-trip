@@ -1,7 +1,7 @@
-const CACHE = 'sister-trip-v20';
+const CACHE = 'sister-trip-v21';
 const CORE = [
-  './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css','./features-v4.css','./editorial-v5.css','./bugfix-v7.css',
-  './app.js','./trip-data.js','./trip-data-imagekeys.js','./local-assets-v6.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./discover-data.js','./gmail-trip-sync.js','./florence-day-plan.js','./editorial-v5-data.js','./reservation-truth-v4.js','./features-v4.js','./reservation-warning-v4.js','./editorial-v5.js','./bugfix-v7.js','./sync.js','./supabase-config.js',
+  './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css','./features-v4.css','./editorial-v5.css','./bugfix-v7.css','./build-v8.css',
+  './app.js','./trip-data.js','./trip-data-imagekeys.js','./local-assets-v6.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./discover-data.js','./gmail-trip-sync.js','./florence-day-plan.js','./editorial-v5-data.js','./reservation-truth-v4.js','./features-v4.js','./reservation-warning-v4.js','./editorial-v5.js','./bugfix-v7.js','./build-v8.js','./sync.js','./supabase-config.js',
   './assets/city/paris-generated.webp','./assets/city/milano-generated.webp',
   './manifest.webmanifest','./icon.svg'
 ];
@@ -46,6 +46,15 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
+
+  // Authenticated Supabase API / Storage responses may contain private reservation
+  // details or ticket files. They are always network-only here. Ticket offline use
+  // is handled separately by the app's AES-GCM encrypted IndexedDB cache.
+  if (url.hostname.endsWith('.supabase.co')) {
+    event.respondWith(fetch(event.request, {cache:'no-store'}));
+    return;
+  }
+
   const isTile = url.hostname.includes('tile.openstreetmap.org');
   const isImage = event.request.destination === 'image' || /\.(png|jpe?g|webp|gif|avif)(\?|$)/i.test(url.pathname);
 

@@ -1,0 +1,55 @@
+/* Sister Trip Build v8 — additive styles only. Keeps the editorial v5 visual system intact. */
+.timeline-item.plan .timeline-dot{background:var(--sage,#819b82);box-shadow:0 0 0 4px rgba(93,125,97,.12)}
+.status-badge.plan{background:rgba(83,116,87,.10);color:#496a4d;border-color:rgba(73,106,77,.16)}
+.florence-experience-v8{margin:14px 0 4px;padding:18px;border:1px solid rgba(43,72,51,.12);border-radius:22px;background:linear-gradient(145deg,rgba(247,241,228,.96),rgba(235,239,228,.88));box-shadow:0 14px 34px rgba(44,54,45,.08)}
+.florence-experience-v8 h4{margin:4px 0 12px;font-family:Georgia,'Times New Roman',serif;font-size:1.25rem;font-weight:500;color:#263c2c}
+.florence-experience-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:13px}
+.florence-experience-tags span{font-size:.66rem;letter-spacing:.09em;padding:6px 8px;border-radius:999px;background:rgba(43,72,51,.08);color:#38563f;font-weight:700}
+.florence-experience-v8 ul{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.florence-experience-v8 li{font-size:.84rem;line-height:1.5;color:#3e4c41}
+.florence-experience-note{margin:13px 0 0;padding-top:12px;border-top:1px solid rgba(43,72,51,.10);font-size:.76rem;line-height:1.55;color:#667267}
+.secure-ticket-slot-v8{margin-top:12px}
+.secure-ticket-missing-v8{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:11px 12px;border-radius:14px;background:rgba(40,58,45,.055);font-size:.76rem;color:#5d685f}
+.secure-ticket-missing-v8>span{font-weight:700;color:#56635a}
+.secure-ticket-missing-v8 small{display:block;flex-basis:100%;line-height:1.45;color:#7a817b}
+.secure-ticket-missing-v8.quiet{background:transparent;padding-left:0}
+.secure-ticket-upload-v8{appearance:none;border:1px solid rgba(42,73,52,.16);background:#f7f2e8;color:#294332;border-radius:999px;padding:8px 11px;font:inherit;font-weight:700;cursor:pointer}
+.secure-ticket-upload-v8:disabled{opacity:.55;cursor:default}
+.secure-ticket-dialog-v8{width:min(94vw,720px);max-width:720px;border:0;padding:0;background:transparent;color:inherit}
+.secure-ticket-dialog-v8::backdrop{background:rgba(20,27,22,.55);backdrop-filter:blur(8px)}
+.secure-ticket-panel-v8{max-height:min(88vh,850px);overflow:auto;border-radius:26px;background:#f7f2e8;box-shadow:0 28px 80px rgba(20,30,23,.26)}
+.secure-ticket-head-v8{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:22px 22px 12px;position:sticky;top:0;z-index:3;background:rgba(247,242,232,.94);backdrop-filter:blur(16px);border-bottom:1px solid rgba(42,64,48,.08)}
+.secure-ticket-head-v8 h2{margin:2px 0 0;font-family:Georgia,'Times New Roman',serif;font-size:1.45rem;font-weight:500;color:#263a2c}
+.secure-ticket-stage-v8{display:grid;gap:18px;padding:18px 18px calc(22px + env(safe-area-inset-bottom))}
+.secure-ticket-placeholder-v8{padding:38px 22px;text-align:center;border:1px dashed rgba(46,69,52,.16);border-radius:20px;background:rgba(255,255,255,.35)}
+.secure-ticket-placeholder-v8 .ticket-glyph{font-size:2rem;margin-bottom:10px}
+.secure-ticket-placeholder-v8 h3{margin:0 0 7px;font-size:1rem;color:#334639}
+.secure-ticket-placeholder-v8 p{margin:0 auto;max-width:42ch;font-size:.8rem;line-height:1.55;color:#717a73}
+.secure-ticket-asset-v8{display:grid;gap:10px;padding:14px;border-radius:20px;background:#fff;box-shadow:0 10px 28px rgba(34,45,37,.08)}
+.secure-ticket-asset-v8>strong{font-size:.82rem;color:#445249}
+.secure-ticket-asset-v8 img{display:block;width:100%;height:auto;max-height:68vh;object-fit:contain;border-radius:13px;background:#fff}
+.secure-ticket-asset-v8 iframe{display:block;width:100%;height:min(64vh,620px);border:0;border-radius:13px;background:#fff}
+.secure-ticket-asset-v8 a{justify-self:start;color:#345a40;font-size:.78rem;font-weight:700;text-decoration:none;border-bottom:1px solid rgba(52,90,64,.25)}
+.secure-cache-badge-v8{display:grid;grid-template-columns:auto 1fr;column-gap:9px;align-items:center;padding:12px 13px;border-radius:15px;background:rgba(67,100,73,.08);color:#48614e}
+.secure-cache-badge-v8>span{grid-row:1/3;font-size:1.05rem}
+.secure-cache-badge-v8 b{font-size:.78rem}
+.secure-cache-badge-v8 small{font-size:.68rem;color:#6f7b72}
+.pwa-homescreen-tip-v8{display:flex;gap:11px;align-items:flex-start;margin:14px 0 0;padding:13px 14px;border-radius:17px;background:rgba(53,81,61,.07);color:#3e5445}
+.pwa-homescreen-tip-v8>span{display:grid;place-items:center;flex:0 0 28px;height:28px;border-radius:10px;background:#fff;font-weight:700}
+.pwa-homescreen-tip-v8 b,.pwa-homescreen-tip-v8 small{display:block}
+.pwa-homescreen-tip-v8 b{font-size:.8rem;margin-bottom:3px}
+.pwa-homescreen-tip-v8 small{font-size:.72rem;line-height:1.45;color:#6e796f}
+.member-status-v8{display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:center;margin:0 0 14px;padding:13px 14px;border-radius:17px;background:linear-gradient(135deg,rgba(44,75,53,.09),rgba(239,232,215,.7));border:1px solid rgba(44,75,53,.08)}
+.member-status-v8>span{font-size:.62rem;letter-spacing:.08em;font-weight:800;padding:6px 8px;border-radius:999px;background:#35513d;color:#f8f4e9}
+.member-status-v8 b,.member-status-v8 small{display:block}
+.member-status-v8 b{font-size:.82rem;color:#33463a;margin-bottom:2px}
+.member-status-v8 small{font-size:.71rem;line-height:1.4;color:#6d776f}
+.member-status-v8.member>span{background:#6a716b}
+@media (max-width:560px){
+  .florence-experience-v8{margin-left:-2px;margin-right:-2px;padding:16px;border-radius:19px}
+  .secure-ticket-dialog-v8{width:100vw;max-width:none;margin:auto 0 0;align-self:end}
+  .secure-ticket-panel-v8{max-height:91dvh;border-radius:24px 24px 0 0}
+  .secure-ticket-head-v8{padding:18px 18px 11px}
+  .secure-ticket-stage-v8{padding:15px 14px calc(20px + env(safe-area-inset-bottom))}
+  .secure-ticket-asset-v8 iframe{height:62dvh}
+}
