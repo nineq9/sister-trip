@@ -51,6 +51,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     await sisterTripLoadClassic('./bugfix-v7.js');
     window.SisterTripBugfixV7Install?.();
 
+    // Editorial can localize visible reservation titles after v4 resolved the
+    // canonical source refs. Add public-safe aliases before the secure ticket pass.
+    await sisterTripLoadClassic('./ticket-alias-v8.js');
+
     // Build v8 adds only the requested Firenze PLAN, secure ticket vault and
     // sister onboarding refinements. It intentionally runs after the visual lock.
     const v8css = document.createElement('link');

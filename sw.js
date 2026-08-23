@@ -1,7 +1,7 @@
-const CACHE = 'sister-trip-v21';
+const CACHE = 'sister-trip-v22';
 const CORE = [
   './','./index.html','./styles.css','./map-v2.css','./map-v3.css','./sync.css','./features-v4.css','./editorial-v5.css','./bugfix-v7.css','./build-v8.css',
-  './app.js','./trip-data.js','./trip-data-imagekeys.js','./local-assets-v6.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./discover-data.js','./gmail-trip-sync.js','./florence-day-plan.js','./editorial-v5-data.js','./reservation-truth-v4.js','./features-v4.js','./reservation-warning-v4.js','./editorial-v5.js','./bugfix-v7.js','./build-v8.js','./sync.js','./supabase-config.js',
+  './app.js','./trip-data.js','./trip-data-imagekeys.js','./local-assets-v6.js','./image-stability.js','./map-v3.js','./map-image-bridge.js','./shared-v2.js','./discover-data.js','./gmail-trip-sync.js','./florence-day-plan.js','./editorial-v5-data.js','./reservation-truth-v4.js','./features-v4.js','./reservation-warning-v4.js','./editorial-v5.js','./bugfix-v7.js','./ticket-alias-v8.js','./build-v8.js','./sync.js','./supabase-config.js',
   './assets/city/paris-generated.webp','./assets/city/milano-generated.webp',
   './manifest.webmanifest','./icon.svg'
 ];
