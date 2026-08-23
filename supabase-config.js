@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await sisterTripLoadClassic('./discover-data.js');
     await sisterTripLoadClassic('./gmail-trip-sync.js');
     window.SisterTripApplyGmailSnapshot?.();
+    await sisterTripLoadClassic('./florence-day-plan.js');
     await sisterTripLoadClassic('./editorial-v5-data.js');
     await sisterTripLoadClassic('./reservation-truth-v4.js');
     window.SisterTripV3Boot?.();
